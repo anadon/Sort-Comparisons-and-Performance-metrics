@@ -68,6 +68,7 @@ run_test_on_container(
     auto end   = iterator(data.end());
     auto sorter = get_sort_func_ptr(args, begin);
     sorter(begin, end);
+    print_iterator_stats(args);
   }else{
     auto begin = data.begin();
     auto end   = data.end();

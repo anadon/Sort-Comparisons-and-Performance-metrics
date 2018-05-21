@@ -46,11 +46,44 @@ func(iterator(x.begin()), iterator(x.end()));
 
 #pragma once
 
+#include <iomanip>
+#include <iostream>
 #include <iterator>
+#include <numeric>
 #include <utility>
-#include <iterator>
 
+using std::cout;
+using std::endl;
+using std::ios;
 using std::iterator_traits;
+using std::setiosflags;
+using std::setw;
+
+
+static ssize_t iteration_counter__constructions = 0;
+static ssize_t iteration_counter__assignments = 0;
+static ssize_t iteration_counter__increments = 0;
+static ssize_t iteration_counter__dereferences = 0;
+static ssize_t iteration_counter__bigjumps = 0;
+static ssize_t iteration_counter__comparisons = 0;
+static ssize_t iteration_counter__max_generation = 0;
+
+static ssize_t counter__assignments = 0;
+static ssize_t counter__comparisons = 0;
+static ssize_t counter__accesses = 0;
+
+static ssize_t distance_counter__constructions = 0;
+static ssize_t distance_counter__copy_constructions = 0;
+static ssize_t distance_counter__conversions = 0;
+static ssize_t distance_counter__assignments = 0;
+static ssize_t distance_counter__increments = 0;
+static ssize_t distance_counter__additions = 0;
+static ssize_t distance_counter__subtractions = 0;
+static ssize_t distance_counter__multiplications = 0;
+static ssize_t distance_counter__divisions = 0;
+static ssize_t distance_counter__comparisons = 0;
+static ssize_t distance_counter__max_generation = 0;
+
 
 
 /*******************************************************************************
@@ -66,22 +99,19 @@ protected:
   T value;
 
 public:
-  static ssize_t assignments;
-  static ssize_t comparisons;
-  static ssize_t accesses;
 
 
   T
   base(
   ) const {
-    ++accesses;
+    ++counter__accesses;
     return value;
   }
 
 
   counter(
   ) : value(T()) {
-    ++assignments;
+    ++counter__assignments;
   }
 
 
@@ -89,32 +119,14 @@ public:
   counter(
     const T& v
   ) : value(v) {
-    ++assignments;
+    ++counter__assignments;
   }
 
 
   counter(
     const counter<T>& x
   ) : value(x.value) {
-    ++assignments;
-  }
-
-
-  static
-  ssize_t
-  total(
-  ){
-    return assignments + comparisons + accesses;
-  }
-
-
-  static
-  void
-  reset(
-  ){
-    assignments = 0;
-    comparisons = 0;
-    accesses = 0;
+    ++counter__assignments;
   }
 
 
@@ -124,7 +136,7 @@ public:
     const counter<T>& x,
     const counter<T>& y
   ){
-    ++counter<T>::comparisons;
+    ++counter__comparisons;
     return x.value < y.value;
   }
 
@@ -133,7 +145,7 @@ public:
   operator=(
     const counter<T>& x
   ){
-    ++assignments;
+    ++counter__assignments;
     value = x.value;
     return *this;
   }
@@ -143,7 +155,7 @@ public:
   operator==(
     const counter<T>& x
   ) const {
-    ++comparisons;
+    ++counter__comparisons;
     return value == x.value;
   }
 
@@ -162,14 +174,6 @@ public:
 };
 
 
-template <class T>
-ssize_t counter<T>::assignments = 0;
-
-template <class T>
-ssize_t counter<T>::comparisons = 0;
-
-template <class T>
-ssize_t counter<T>::accesses = 0;
 
 
 /*******************************************************************************
@@ -302,47 +306,11 @@ protected:
 
 
 public:
-  static ssize_t constructions;
-  static ssize_t copy_constructions;
-  static ssize_t conversions;
-  static ssize_t assignments;
-  static ssize_t increments;
-  static ssize_t additions;
-  static ssize_t subtractions;
-  static ssize_t multiplications;
-  static ssize_t divisions;
-  static ssize_t comparisons;
-  static ssize_t max_generation;
-
-
-  static void reset() {
-    constructions = 0;
-    copy_constructions = 0;
-    conversions = 0;
-    assignments = 0;
-    increments = 0;
-    additions = 0;
-    subtractions = 0;
-    multiplications = 0;
-    divisions = 0;
-    comparisons = 0;
-    max_generation = 0;
-  }
-
-
-  static
-  ssize_t
-  total(
-  ){
-    return constructions + copy_constructions + conversions + assignments
-         + increments + additions + subtractions + multiplications + divisions
-         + comparisons;
-  }
 
 
   distance_counter(
   ) : generation(0) {
-    ++constructions;
+    ++distance_counter__constructions;
   }
 
 
@@ -352,14 +320,14 @@ public:
   ){
     current = x;
     generation = 0;
-    ++conversions;
+    ++distance_counter__conversions;
   }
 
 
   operator
   int(
   ) const {
-    ++conversions;
+    ++distance_counter__conversions;
     return current;
   }
 
@@ -369,9 +337,9 @@ public:
   ){
     current = c.current;
     generation = c.generation + 1;
-    ++copy_constructions;
-    if (generation > max_generation) {
-      max_generation = generation;
+    ++distance_counter__copy_constructions;
+    if (generation > distance_counter__max_generation) {
+      distance_counter__max_generation = generation;
     }
   }
 
@@ -387,7 +355,7 @@ public:
   operator=(
     const distance_counter<RandomAccessIterator, Distance>& x
   ){
-    ++assignments;
+    ++distance_counter__assignments;
     current = x.current;
     return *this;
   }
@@ -396,7 +364,7 @@ public:
   distance_counter<RandomAccessIterator, Distance>&
   operator++(
   ){
-    ++increments;
+    ++distance_counter__increments;
     ++current;
     return *this;
   }
@@ -407,7 +375,7 @@ public:
     int
   ){
     distance_counter<RandomAccessIterator, Distance> tmp = *this;
-    ++increments;
+    ++distance_counter__increments;
     ++current;
     return tmp;
   }
@@ -415,7 +383,7 @@ public:
 
   distance_counter<RandomAccessIterator, Distance>&
   operator--(){
-    ++increments;
+    ++distance_counter__increments;
     --current;
     return *this;
   }
@@ -426,7 +394,7 @@ public:
     int
   ){
     distance_counter<RandomAccessIterator, Distance> tmp = *this;
-    ++increments;
+    ++distance_counter__increments;
     --current;
     return tmp;
   }
@@ -454,7 +422,7 @@ public:
   operator+=(
     const distance_counter<RandomAccessIterator, Distance>& n
   ){
-    ++additions;
+    ++distance_counter__additions;
     current += n.current;
     return *this;
   }
@@ -464,7 +432,7 @@ public:
   operator+=(
     const Distance& n
   ){
-    ++additions;
+    ++distance_counter__additions;
     current += n;
     return *this;
   }
@@ -492,7 +460,7 @@ public:
   operator-=(
     const distance_counter<RandomAccessIterator, Distance>& n
   ){
-    ++subtractions;
+    ++distance_counter__subtractions;
     current -= n.current;
     return *this;
   }
@@ -502,7 +470,7 @@ public:
   operator-=(
     const Distance& n
   ){
-    ++subtractions;
+    ++distance_counter__subtractions;
     current -= n;
     return *this;
   }
@@ -530,7 +498,7 @@ public:
   operator*=(
     const distance_counter<RandomAccessIterator, Distance>& n
   ){
-    ++multiplications;
+    ++distance_counter__multiplications;
     current *= n.current;
     return *this;
   }
@@ -540,7 +508,7 @@ public:
   operator*=(
     const Distance& n
   ){
-    ++multiplications;
+    ++distance_counter__multiplications;
     current *= n;
     return *this;
   }
@@ -559,7 +527,7 @@ public:
   operator/=(
     const distance_counter<RandomAccessIterator, Distance>& n
   ){
-    ++divisions;
+    ++distance_counter__divisions;
     current /= n.current;
     return *this;
   }
@@ -568,7 +536,7 @@ public:
   distance_counter<RandomAccessIterator, Distance>& operator/=(
     const Distance& n
   ){
-    ++divisions;
+    ++distance_counter__divisions;
     current /= n;
     return *this;
   }
@@ -582,7 +550,7 @@ operator==(
   const distance_counter<_RandomAccessIterator, _Distance>& x,
   const distance_counter<_RandomAccessIterator, _Distance>& y
 ){
-  ++distance_counter<_RandomAccessIterator, _Distance>::comparisons;
+  ++distance_counter__comparisons;
   return x.current == y.current;
 }
 
@@ -595,7 +563,7 @@ operator<(
   const distance_counter<_RandomAccessIterator, _Distance>& x,
   const distance_counter<_RandomAccessIterator, _Distance>& y
 ){
-  ++distance_counter<_RandomAccessIterator, _Distance>::comparisons;
+  ++distance_counter__comparisons;
   return x.current < y.current;
 }
 
@@ -608,7 +576,7 @@ operator<(
   const distance_counter<_RandomAccessIterator, _Distance>& x,
   const _Distance& y
 ){
-  ++distance_counter<_RandomAccessIterator, _Distance>::comparisons;
+  ++distance_counter__comparisons;
     return x.current < y;
 }
 
@@ -621,7 +589,7 @@ operator<(
   const _Distance& x,
   const distance_counter<_RandomAccessIterator, _Distance>& y
 ){
-  ++distance_counter<_RandomAccessIterator, _Distance>::comparisons;
+  ++distance_counter__comparisons;
   return x < y.current;
 }
 
@@ -681,7 +649,7 @@ operator-(
   const distance_counter<_RandomAccessIterator, _Distance>& x,
   const distance_counter<_RandomAccessIterator, _Distance>& y
 ){
-  ++distance_counter<_RandomAccessIterator, _Distance>::subtractions;
+  ++distance_counter__subtractions;
   return distance_counter<_RandomAccessIterator, _Distance>(x.current - y.current);
 }
 
@@ -709,51 +677,6 @@ operator*(
   return x * n;
 }
 
-
-template <
-  typename RandomAccessIterator,
-  typename Distance>
-ssize_t distance_counter<RandomAccessIterator, Distance>::constructions = 0;
-template <
-  typename RandomAccessIterator,
-  typename Distance>
-ssize_t distance_counter<RandomAccessIterator, Distance>::copy_constructions = 0;
-template <
-  typename RandomAccessIterator,
-  typename Distance>
-ssize_t distance_counter<RandomAccessIterator, Distance>::conversions = 0;
-template <
-  typename RandomAccessIterator,
-  typename Distance>
-ssize_t distance_counter<RandomAccessIterator, Distance>::assignments = 0;
-template <
-  typename RandomAccessIterator,
-  typename Distance>
-ssize_t distance_counter<RandomAccessIterator, Distance>::increments = 0;
-template <
-  typename RandomAccessIterator,
-  typename Distance>
-ssize_t distance_counter<RandomAccessIterator, Distance>::additions = 0;
-template <
-  typename RandomAccessIterator,
-  typename Distance>
-ssize_t distance_counter<RandomAccessIterator, Distance>::subtractions = 0;
-template <
-  typename RandomAccessIterator,
-  typename Distance>
-ssize_t distance_counter<RandomAccessIterator, Distance>::multiplications = 0;
-template <
-  typename RandomAccessIterator,
-  typename Distance>
-ssize_t distance_counter<RandomAccessIterator, Distance>::divisions = 0;
-template <
-  typename RandomAccessIterator,
-  typename Distance>
-ssize_t distance_counter<RandomAccessIterator, Distance>::comparisons = 0;
-template <
-  typename RandomAccessIterator,
-  typename Distance>
-ssize_t distance_counter<RandomAccessIterator, Distance>::max_generation = 0;
 
 
 
@@ -842,41 +765,9 @@ protected:
   ssize_t generation;
 public:
 
-  static ssize_t constructions;
-  static ssize_t assignments;
-  static ssize_t increments;
-  static ssize_t dereferences;
-  static ssize_t bigjumps;
-  static ssize_t comparisons;
-  static ssize_t max_generation;
-
-
-  static
-  void
-  reset(
-  ){
-    constructions = 0;
-    assignments = 0;
-    increments = 0;
-    dereferences = 0;
-    bigjumps = 0;
-    comparisons = 0;
-    max_generation = 0;
-  }
-
-
-  static
-  ssize_t
-  total(
-  ){
-    return constructions + assignments + increments + dereferences + bigjumps +
-           comparisons + max_generation;
-  }
-
-
   iteration_counter(
   ) : generation(0) {
-    ++constructions;
+    ++iteration_counter__constructions;
   }
 
 
@@ -885,7 +776,7 @@ public:
   ){
     current = x;
     generation = 0;
-    ++constructions;
+    ++iteration_counter__constructions;
   }
 
 
@@ -894,9 +785,9 @@ public:
   ){
     current = c.current;
     generation = c.generation + 1;
-    ++constructions;
-    if (generation > max_generation) {
-      max_generation = generation;
+    ++iteration_counter__constructions;
+    if (generation > iteration_counter__max_generation) {
+      iteration_counter__max_generation = generation;
     }
   }
 
@@ -911,7 +802,7 @@ public:
   Reference
   operator*(
   ) const {
-    ++dereferences;
+    ++iteration_counter__dereferences;
     return *current;
   }
 
@@ -919,7 +810,7 @@ public:
   self&
   operator++(
   ){
-    ++increments;
+    ++iteration_counter__increments;
     ++current;
     return *this;
   }
@@ -930,7 +821,7 @@ public:
     int
   ){
     self copy(*this);
-    ++increments;
+    ++iteration_counter__increments;
     ++current;
     return copy;
   }
@@ -939,7 +830,7 @@ public:
   self&
   operator--(
   ){
-    ++increments;
+    ++iteration_counter__increments;
     --current;
     return *this;
   }
@@ -950,7 +841,7 @@ public:
     int
   ){
     self copy = *this;
-    ++increments;
+    ++iteration_counter__increments;
     --current;
     return copy;
   }
@@ -986,7 +877,7 @@ public:
   operator+=(
     const Distance& n
   ){
-    ++bigjumps;
+    ++iteration_counter__bigjumps;
     current += n;
     return *this;
   }
@@ -1022,7 +913,7 @@ public:
   operator-=(
     const Distance& n
   ) {
-    ++bigjumps;
+    ++iteration_counter__bigjumps;
     current -= n;
     return *this;
   }
@@ -1040,7 +931,7 @@ public:
   operator[](
     const Distance& n
   ){
-    dereferences++;
+    iteration_counter__dereferences++;
     return *(*this + n);
   }
 
@@ -1057,7 +948,7 @@ operator==(
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y
 ){
-  ++iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>::comparisons;
+  ++iteration_counter__comparisons;
   return x.current == y.current;
 }
 
@@ -1086,7 +977,7 @@ operator<(
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y
 ){
-   ++iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>::comparisons;
+   ++iteration_counter__comparisons;
    return x.current < y.current;
 }
 
@@ -1101,7 +992,7 @@ operator<=(
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y
 ){
-   ++iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>::comparisons;
+   ++iteration_counter__comparisons;
    return x.current <= y.current;
 }
 
@@ -1116,7 +1007,7 @@ operator>=(
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y
 ){
-   ++iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>::comparisons;
+   ++iteration_counter__comparisons;
    return x.current >= y.current;
 }
 
@@ -1131,7 +1022,7 @@ operator>(
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y
 ){
-   ++iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>::comparisons;
+   ++iteration_counter__comparisons;
    return x.current > y.current;
 }
 
@@ -1146,7 +1037,7 @@ operator-(
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y
 ){
-  ++iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>::bigjumps;
+  ++iteration_counter__bigjumps;
   return _Distance(x.current - y.current);
 }
 
@@ -1161,56 +1052,91 @@ operator+(
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& n,
   const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x
 ){
-  ++iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>::bigjumps;
+  ++iteration_counter__bigjumps;
   return iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>(x.current + n.current);
 }
 
 
-template <
-  typename RandomAccessIterator,
-  typename T,
-  typename Reference,
-  typename Distance>
-ssize_t iteration_counter<RandomAccessIterator, T, Reference, Distance>::constructions = 0;
+void print_iterator_stats(
+  const struct config args
+){
+  const int width = 30;
 
-template <
-  typename RandomAccessIterator,
-  typename T,
-  typename Reference,
-  typename Distance>
-ssize_t iteration_counter<RandomAccessIterator, T, Reference, Distance>::assignments = 0;
+  cout << endl
+    << setw(width) << "Algorithm"
+    << setw(width) << "Time"
+    << setw(width) << "data assignments"
+    << setw(width) << "data comparisons"
+    << setw(width) << "data accesses"
+    << setw(width) << "distance constructions"
+    << setw(width) << "distance copy constructions"
+    << setw(width) << "distance conversions"
+    << setw(width) << "distance assignments"
+    << setw(width) << "distance increments"
+    << setw(width) << "distance additions"
+    << setw(width) << "distance subtractions"
+    << setw(width) << "distance multiplications"
+    << setw(width) << "distance divisions"
+    << setw(width) << "distance comparisons"
+    << setw(width) << "distance max generation"
+    << setw(width) << "iterator constructions"
+    << setw(width) << "iterator assignments"
+    << setw(width) << "iterator increments"
+    << setw(width) << "iterator dereferences"
+    << setw(width) << "iterator bigjumps"
+    << setw(width) << "iterator comparisons"
+    << setw(width) << "iterator max generation"
+    << setw(width) << "total"
+    << endl;
 
-template <
-  typename RandomAccessIterator,
-  typename T,
-  typename Reference,
-  typename Distance>
-ssize_t iteration_counter<RandomAccessIterator, T, Reference, Distance>::increments = 0;
 
-template <
-  typename RandomAccessIterator,
-  typename T,
-  typename Reference,
-  typename Distance>
-ssize_t iteration_counter<RandomAccessIterator, T, Reference, Distance>::dereferences = 0;
+  std::vector<ssize_t> op_counts;
 
-template <
-  typename RandomAccessIterator,
-  typename T,
-  typename Reference,
-  typename Distance>
-ssize_t iteration_counter<RandomAccessIterator, T, Reference, Distance>::bigjumps = 0;
+  op_counts.push_back(counter__assignments);
+  op_counts.push_back(counter__comparisons);
+  op_counts.push_back(counter__accesses);
 
-template <
-  typename RandomAccessIterator,
-  typename T,
-  typename Reference,
-  typename Distance>
-ssize_t iteration_counter<RandomAccessIterator, T, Reference, Distance>::comparisons = 0;
+  op_counts.push_back(distance_counter__constructions);
+  op_counts.push_back(distance_counter__copy_constructions);
+  op_counts.push_back(distance_counter__conversions);
+  op_counts.push_back(distance_counter__assignments);
+  op_counts.push_back(distance_counter__increments);
+  op_counts.push_back(distance_counter__additions);
+  op_counts.push_back(distance_counter__subtractions);
+  op_counts.push_back(distance_counter__multiplications);
+  op_counts.push_back(distance_counter__divisions);
+  op_counts.push_back(distance_counter__comparisons);
+  op_counts.push_back(distance_counter__max_generation);
 
-template <
-  typename RandomAccessIterator,
-  typename T,
-  typename Reference,
-  typename Distance>
-ssize_t iteration_counter<RandomAccessIterator, T, Reference, Distance>::max_generation = 0;
+  op_counts.push_back(iteration_counter__constructions);
+  op_counts.push_back(iteration_counter__assignments);
+  op_counts.push_back(iteration_counter__increments);
+  op_counts.push_back(iteration_counter__dereferences);
+  op_counts.push_back(iteration_counter__bigjumps);
+  op_counts.push_back(iteration_counter__comparisons);
+  op_counts.push_back(iteration_counter__max_generation);
+
+  ssize_t total = std::accumulate(op_counts.begin(), op_counts.end(), 0);
+
+  cout << setiosflags(ios::fixed);
+  switch(args.chosen_sort){
+    case introsort:
+      {
+        cout << setw(width) << "introsort";
+      }
+      break;
+    case timsort:
+      {
+        cout << setw(width) << "timsort";
+      }
+      break;
+    default:
+      //Don't worry about this because it should never be possible to reach here
+      exit(1);
+  };
+  for(auto i = op_counts.begin(); i != op_counts.end(); i++){
+    cout << setw(width) << *i;
+  }
+  cout << setw(width) << total
+       << endl;
+}
