@@ -82,16 +82,31 @@ void
 test_bootstrap(
   const struct config args
 ){
-  switch(args.chosen_container){
-  case deque_:
-    run_test_on_container(args, std::deque<long int>());
-    break;
-  case vector_:
-    run_test_on_container(args, std::vector<long int>());
-    break;
-  default:
-    exit(-2);
-  };
+  if(args.enable_iterator_metrics){
+    switch(args.chosen_container){
+      case deque_:
+        run_test_on_container(args, std::deque<counter<long int> >());
+        break;
+      case vector_:
+        run_test_on_container(args, std::vector<counter<long int> >());
+        break;
+      default:
+        exit(-2);
+    };
+  }else{
+      switch(args.chosen_container){
+        case deque_:
+          run_test_on_container(args, std::deque<long int>());
+          break;
+        case vector_:
+          run_test_on_container(args, std::vector<long int>());
+          break;
+        default:
+          exit(-2);
+      };
+
+  }
+
 }
 
 

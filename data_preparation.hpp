@@ -27,40 +27,48 @@ with "Sort Performance Comparison".  If not, see <http://www.gnu.org/licenses/>.
 #include "parse_arguments.hpp"
 
 
-template<typename container>
+template<
+  typename T,
+  template<typename, typename...> class container>
 void fill_with_sorted(
-  container &data,
+  container<T> &data,
   ssize_t length)
 {
   for(ssize_t i = 0; i < length; i++)
-    data.push_back(LONG_MIN + i);
+    data.push_back(T(LONG_MIN + i));
 }
 
 
-template<typename container>
+template<
+  typename T,
+  template<typename, typename...> class container>
 void fill_with_reverse_sorted(
-  container &data,
+  container<T> &data,
   ssize_t length)
 {
   for(ssize_t i = 0; i < length; i++)
-    data.push_back(LONG_MAX - i);
+    data.push_back(T(LONG_MAX - i));
 }
 
 
-template<typename container>
+template<
+  typename T,
+  template<typename, typename...> class container>
 void fill_with_random(
-  container &data,
+  container<T> &data,
   ssize_t length)
 {
   std::mt19937_64 rng(0);
   for(ssize_t i = 0; i < length; i++)
-    data.push_back(rng());
+    data.push_back(T(rng()));
 }
 
 
-template<typename container>
+template<
+  typename T,
+  template<typename, typename...> class container>
 void fill_with_median_of_three_killer(
-  container &data,
+  container<T> &data,
   ssize_t length)
 {
   //TODO
@@ -71,22 +79,24 @@ void fill_with_median_of_three_killer(
   for(ssize_t i = 0; i < length; i++){
     if(i < length/2){
       if(i % 2 == 0){
-        data.push_back(i);
+        data.push_back(T(i));
       }else{
-        data.push_back((length/2)+(i-1));
+        data.push_back(T((length/2)+(i-1)));
       }
     }else{
-      data.push_back((i-length) * 2);
+      data.push_back(T((i-length) * 2));
     }
   }
 }
 
 
-template<typename container>
+template<
+  typename T,
+  template<typename, typename...> class container>
 void fill_with_stdin(
-  container data,
-  ssize_t length)
-{
+  container<T> &data,
+  ssize_t length
+){
   //TODO: don't ignore length and add it as a way to limit read size.  This will
   //allow for things like reading from /dev/urandom.
   cout << "ERROR: unimplemented" << endl;
@@ -96,40 +106,48 @@ void fill_with_stdin(
 }
 
 
-template<typename container>
+template<
+  typename T,
+  template<typename, typename...> class container>
 void fill_with_sorted_forward(
-  container &data,
-  ssize_t length)
-{
+  container<T> &data,
+  ssize_t length
+){
   for(ssize_t i = 0; i < length; i++)
-    data.push_front(LONG_MAX - i);
+    data.push_front(T(LONG_MAX - i));
 }
 
 
-template<typename container>
+template<
+  typename T,
+  template<typename, typename...> class container>
 void fill_with_reverse_sorted_forward(
-  container &data,
-  ssize_t length)
-{
+  container<T> &data,
+  ssize_t length
+){
   for(ssize_t i = 0; i < length; i++)
-    data.push_front(LONG_MIN + i);
+    data.push_front(T(LONG_MIN + i));
 }
 
 
-template<typename container>
+template<
+  typename T,
+  template<typename, typename...> class container>
 void fill_with_random_forward(
-  container &data,
-  ssize_t length)
-{
+  container<T> &data,
+  ssize_t length
+){
   std::mt19937_64 rng(0);
   for(ssize_t i = 0; i < length; i++)
-    data.push_front(rng());
+    data.push_front(T(rng()));
 }
 
 
-template<typename container>
+template<
+  typename T,
+  template<typename, typename...> class container>
 void fill_with_median_of_three_killer_forward(
-  container &data,
+  container<T> &data,
   ssize_t length)
 {
   //TODO
@@ -140,20 +158,22 @@ void fill_with_median_of_three_killer_forward(
   for(ssize_t i = length-1; i >= 0; i--){
     if(i < length/2){
       if(i % 2 == 0){
-        data.push_front(i);
+        data.push_front(T(i));
       }else{
-        data.push_front((length/2)+(i-1));
+        data.push_front(T((length/2)+(i-1)));
       }
     }else{
-      data.push_front((i-length) * 2);
+      data.push_front(T((i-length) * 2));
     }
   }
 }
 
 
-template<typename container>
+template<
+  typename T,
+  template<typename, typename...> class container>
 void fill_with_stdin_forward(
-  container data,
+  container<T> &data,
   ssize_t length)
 {
   //TODO: don't ignore length and add it as a way to limit read size.  This will
@@ -199,7 +219,8 @@ populate_container(
       break;
     case stdin_:
       {
-        fill_with_stdin_forward(std::front_inserter(data), args.test_length);
+         exit(-3);
+        //fill_with_stdin_forward(std::front_inserter(data), args.test_length);
       }
       break;
     default:

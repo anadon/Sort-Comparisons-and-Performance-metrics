@@ -46,6 +46,7 @@ func(iterator(x.begin()), iterator(x.end()));
 
 #pragma once
 
+#include <cassert>
 #include <iomanip>
 #include <iostream>
 #include <iterator>
@@ -100,7 +101,6 @@ protected:
 
 public:
 
-
   T
   base(
   ) const {
@@ -141,6 +141,202 @@ public:
   }
 
 
+  friend
+  bool
+  operator<=(
+    const counter<T>& x,
+    const counter<T>& y
+  ){
+    ++counter__comparisons;
+    return x.value <= y.value;
+  }
+
+
+  friend
+  bool
+  operator>(
+    const counter<T>& x,
+    const counter<T>& y
+  ){
+    ++counter__comparisons;
+    return x.value > y.value;
+  }
+
+
+  friend
+  bool
+  operator>=(
+    const counter<T>& x,
+    const counter<T>& y
+  ){
+    ++counter__comparisons;
+    return x.value >= y.value;
+  }
+
+
+  friend
+  bool
+  operator==(
+    const counter<T>& x,
+    const counter<T>& y
+  ){
+    ++counter__comparisons;
+    return x.value == y.value;
+  }
+
+
+  friend
+  bool
+  operator!=(
+    const counter<T>& x,
+    const counter<T>& y
+  ){
+    ++counter__comparisons;
+    return x.value != y.value;
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+friend
+bool
+operator<(
+  const counter<T>& x,
+  const T& y
+){
+  ++counter__comparisons;
+  return x.value < y;
+}
+
+
+friend
+bool
+operator<=(
+  const counter<T>& x,
+  const T& y
+){
+  ++counter__comparisons;
+  return x.value <= y;
+}
+
+
+friend
+bool
+operator>(
+  const counter<T>& x,
+  const T& y
+){
+  ++counter__comparisons;
+  return x.value > y;
+}
+
+
+friend
+bool
+operator>=(
+  const counter<T>& x,
+  const T& y
+){
+  ++counter__comparisons;
+  return x.value >= y;
+}
+
+
+friend
+bool
+operator==(
+  const counter<T>& x,
+  const T& y
+){
+  ++counter__comparisons;
+  return x.value == y;
+}
+
+
+friend
+bool
+operator!=(
+  const counter<T>& x,
+  const T& y
+){
+  ++counter__comparisons;
+  return x.value != y;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+friend
+bool
+operator<(
+  const T& x,
+  const counter<T>& y
+){
+  ++counter__comparisons;
+  return x < y.value;
+}
+
+
+friend
+bool
+operator<=(
+  const T& x,
+  const counter<T>& y
+){
+  ++counter__comparisons;
+  return x <= y.value;
+}
+
+
+friend
+bool
+operator>(
+  const T& x,
+  const counter<T>& y
+){
+  ++counter__comparisons;
+  return x > y.value;
+}
+
+
+friend
+bool
+operator>=(
+  const T& x,
+  const counter<T>& y
+){
+  ++counter__comparisons;
+  return x >= y.value;
+}
+
+
+friend
+bool
+operator==(
+  const T& x,
+  const counter<T>& y
+){
+  ++counter__comparisons;
+  return x == y.value;
+}
+
+
+friend
+bool
+operator!=(
+  const T& x,
+  const counter<T>& y
+){
+  ++counter__comparisons;
+  return x != y.value;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+
   counter<T>&
   operator=(
     const counter<T>& x
@@ -148,22 +344,6 @@ public:
     ++counter__assignments;
     value = x.value;
     return *this;
-  }
-
-
-  bool
-  operator==(
-    const counter<T>& x
-  ) const {
-    ++counter__comparisons;
-    return value == x.value;
-  }
-
-  bool
-  operator!=(
-    const counter<T>& x
-  ) const {
-    return !(value == x.value);
   }
 
   T
@@ -1060,34 +1240,33 @@ operator+(
 void print_iterator_stats(
   const struct config args
 ){
-  const int width = 30;
+  const int width = 26;
 
-  cout << endl
-    << setw(width) << "Algorithm"
-    << setw(width) << "Time"
-    << setw(width) << "data assignments"
-    << setw(width) << "data comparisons"
-    << setw(width) << "data accesses"
-    << setw(width) << "distance constructions"
-    << setw(width) << "distance copy constructions"
-    << setw(width) << "distance conversions"
-    << setw(width) << "distance assignments"
-    << setw(width) << "distance increments"
-    << setw(width) << "distance additions"
-    << setw(width) << "distance subtractions"
-    << setw(width) << "distance multiplications"
-    << setw(width) << "distance divisions"
-    << setw(width) << "distance comparisons"
-    << setw(width) << "distance max generation"
-    << setw(width) << "iterator constructions"
-    << setw(width) << "iterator assignments"
-    << setw(width) << "iterator increments"
-    << setw(width) << "iterator dereferences"
-    << setw(width) << "iterator bigjumps"
-    << setw(width) << "iterator comparisons"
-    << setw(width) << "iterator max generation"
-    << setw(width) << "total"
-    << endl;
+  std::vector<std::string> headers = {
+//    "Algorithm",
+    "data assignments",
+    "data comparisons",
+    "data accesses",
+    "distance constructions",
+    "distance copy constructions",
+    "distance conversions",
+    "distance assignments",
+    "distance increments",
+    "distance additions",
+    "distance subtractions",
+    "distance multiplications",
+    "distance divisions",
+    "distance comparisons",
+    "distance max generation",
+    "iterator constructions",
+    "iterator assignments",
+    "iterator increments",
+    "iterator dereferences",
+    "iterator bigjumps",
+    "iterator comparisons",
+    "iterator max generation",
+    "total",
+  };
 
 
   std::vector<ssize_t> op_counts;
@@ -1116,18 +1295,49 @@ void print_iterator_stats(
   op_counts.push_back(iteration_counter__comparisons);
   op_counts.push_back(iteration_counter__max_generation);
 
-  ssize_t total = std::accumulate(op_counts.begin(), op_counts.end(), 0);
+  //int_least64_t total = std::accumulate(op_counts.begin(), op_counts.end(), 0);
+  ssize_t total =
+      counter__assignments
+    + counter__comparisons
+    + counter__accesses
+    + distance_counter__constructions
+    + distance_counter__copy_constructions
+    + distance_counter__conversions
+    + distance_counter__assignments
+    + distance_counter__increments
+    + distance_counter__additions
+    + distance_counter__subtractions
+    + distance_counter__multiplications
+    + distance_counter__divisions
+    + distance_counter__comparisons
+    + distance_counter__max_generation
+    + iteration_counter__constructions
+    + iteration_counter__assignments
+    + iteration_counter__increments
+    + iteration_counter__dereferences
+    + iteration_counter__bigjumps
+    + iteration_counter__comparisons
+    + iteration_counter__max_generation;
+  op_counts.push_back(total);
 
-  cout << setiosflags(ios::fixed);
+  //cout << setiosflags(ios::fixed);
+
+  cout << "algorithm";
+  for(size_t i = 0; i < op_counts.size(); i++){
+    if(0 != op_counts[i])
+      cout << setw(width) << headers[i];
+  }
+  cout << endl;
+
   switch(args.chosen_sort){
     case introsort:
       {
-        cout << setw(width) << "introsort";
+        cout << "introsort";
       }
       break;
     case timsort:
       {
-        cout << setw(width) << "timsort";
+        cout << "timsort";
       }
       break;
     default:
@@ -1135,8 +1345,8 @@ void print_iterator_stats(
       exit(1);
   };
   for(auto i = op_counts.begin(); i != op_counts.end(); i++){
-    cout << setw(width) << *i;
+    if(0 != *i)
+      cout << setw(width) << *i;
   }
-  cout << setw(width) << total
-       << endl;
+  cout << endl;
 }
