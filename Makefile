@@ -5,13 +5,26 @@ HEADERS = data_preparation.hpp \
 
 SOURCES = main.cpp
 
-EXEC = sortperf
+OBJECTS = main.o
 
-all:
-	g++ -O3 -march=native --std=c++17 main.cpp -o $(EXEC)
+CPP_FLAGS = --std=c++17
 
-debug:
-	$(CXX) -ggdb -Wall -Wextra -Wpedantic -O0 --std=c++17 main.cpp -o $(EXEC)
+CPP_RELEASE_FLAGS = $(CPP_FLAGS) -O3 -march=native
+
+CPP_DEBUG_FLAGS = $(CPP_FLAGS) -DSCP_DEBUG -O0 -g -Wall -Wextra -Wpedantic
+
+EXEC = SCP
+
+CXX = g++
+
+all: $(OBJECTS) $(HEADERS)
+	$(CXX) $(CPP_RELEASE_FLAGS) $(OBJECTS) -o $(EXEC)
+
+debug: $(OBJECTS) $(HEADERS)
+	$(CXX) $(CPP_DEBUG_FLAGS) $(OBJECTS) -o $(EXEC)
 
 clean:
-	rm -f a.out gmon.* *.o $(EXEC)
+	rm -f a.out gmon.* *.o $(EXEC) $(OBJECTS)
+
+%.o:%.cpp
+	$(CXX) $(CPP_DEBUG_FLAGS) -c $< -o $@

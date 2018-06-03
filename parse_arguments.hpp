@@ -94,7 +94,6 @@ static struct argp_option options[] = {
 
 static error_t parse_opt(int key, char *arg, struct argp_state *state){
   struct config *args;
-  long test;
   char *sanityCheck;
   std::string notPositiveMsg;
   args = (struct config*) state->input;

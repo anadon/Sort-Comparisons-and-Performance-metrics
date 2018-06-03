@@ -112,11 +112,23 @@ test_bootstrap(
 
 int main(int argc, char **argv){
 
+  #ifdef SCP_DEBUG
+  cout << "Starting" << endl;
+  #endif
+
   config run_config = {undefined_sort, undefined_test, undefined_container, 0};
 
   argp_parse(&interpreter, argc, argv, 0, 0, &run_config);
 
+  #ifdef SCP_DEBUG
+  cout << "Got configuration, runnong analysis" << endl;
+  #endif
+
   test_bootstrap(run_config);
+
+  #ifdef SCP_DEBUG
+  cout << "Complete" << endl;
+  #endif
 
   return 0;
 }

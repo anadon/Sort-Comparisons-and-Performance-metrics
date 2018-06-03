@@ -1,3 +1,4 @@
 *.o
 sortperf
 gmon.*
+SCP
