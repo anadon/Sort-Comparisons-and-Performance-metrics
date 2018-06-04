@@ -1,0 +1,3 @@
+[submodule "madlib"]
+	path = madlib
+	url = https://github.com/anadon/madlib

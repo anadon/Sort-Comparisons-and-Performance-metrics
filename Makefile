@@ -18,9 +18,11 @@ EXEC = SCP
 CXX = g++
 
 all: $(OBJECTS) $(HEADERS)
+	git submodule init https://github.com/anadon/madlib
 	$(CXX) $(CPP_RELEASE_FLAGS) $(OBJECTS) -o $(EXEC)
 
 debug: $(OBJECTS) $(HEADERS)
+	git submodule init https://github.com/anadon/madlib
 	$(CXX) $(CPP_DEBUG_FLAGS) $(OBJECTS) -o $(EXEC)
 
 clean:
