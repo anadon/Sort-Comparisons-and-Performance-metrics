@@ -121,7 +121,7 @@ int main(int argc, char **argv){
   argp_parse(&interpreter, argc, argv, 0, 0, &run_config);
 
   #ifdef SCP_DEBUG
-  cout << "Got configuration, runnong analysis" << endl;
+  cout << "Got configuration, running analysis" << endl;
   #endif
 
   test_bootstrap(run_config);
