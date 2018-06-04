@@ -7,7 +7,7 @@ SOURCES = main.cpp
 
 OBJECTS = main.o
 
-CPP_FLAGS = --std=c++17
+CPP_FLAGS = --std=c++17 -I madlib/include
 
 CPP_RELEASE_FLAGS = $(CPP_FLAGS) -O3 -march=native
 
@@ -18,7 +18,8 @@ EXEC = SCP
 CXX = g++
 
 all: $(OBJECTS) $(HEADERS)
-	git submodule init https://github.com/anadon/madlib
+	git submodule init madlib
+	#https://github.com/anadon/madlib
 	$(CXX) $(CPP_RELEASE_FLAGS) $(OBJECTS) -o $(EXEC)
 
 debug: $(OBJECTS) $(HEADERS)
@@ -28,5 +29,5 @@ debug: $(OBJECTS) $(HEADERS)
 clean:
 	rm -f a.out gmon.* *.o $(EXEC) $(OBJECTS)
 
-%.o:%.cpp
+$(OBJECTS):$(SOURCES)
 	$(CXX) $(CPP_DEBUG_FLAGS) -c $< -o $@
