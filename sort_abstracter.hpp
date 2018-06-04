@@ -1,5 +1,5 @@
 /*******************************************************************************
-Copyright <AMBIGUOUS>, 2018
+Copyright Josh Marshall, 2018
 *******************************************************************************/
 
 /*******************************************************************************
@@ -23,6 +23,8 @@ with "Sort Performance Comparison".  If not, see <http://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <timsort.hpp>
+
+#include "introsort.hpp"
 
 
 /*******************************************************************************
@@ -56,9 +58,11 @@ void (*get_sort_func_ptr(
   RandomAccessItertor
 ){
     switch(args.chosen_sort){
-      case introsort: return std::sort;
-      case timsort: return madlib::timsort;
-      case null: return null_sort;
+      case std_sort:        return std::sort;
+      case std_stable_sort: return std::stable_sort;
+      case introsort:       return introsort;
+      case timsort:         return madlib::timsort;
+      case null:            return null_sort;
       default: exit(-3);
     };
 }
