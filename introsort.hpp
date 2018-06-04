@@ -77,17 +77,17 @@ with "Sort Performance Comparison".  If not, see <http://www.gnu.org/licenses/>.
 
 
 //#include <cstdlib>       // for rand
-//#include <bits/algorithmfwd.h>
+#include <bits/algorithmfwd.h>
 #include <bits/stl_heap.h>
 #include <bits/stl_tempbuf.h>  // for _Temporary_buffer
-//#include <bits/predefined_ops.h>
+#include <bits/predefined_ops.h>
 
 //#if __cplusplus >= 201103L
 //#include <bits/uniform_int_dist.h>
 //#endif
 
 
-
+namespace SCP{
 /**
  *  @doctodo
  *  This controls some aspect of the sort routines.
@@ -99,7 +99,7 @@ template<
   typename _RandomAccessIterator,
   typename _Compare>
 void
-__final_insertion_sort(
+final_insertion_sort(
   _RandomAccessIterator __first,
   _RandomAccessIterator __last,
   _Compare __comp
@@ -117,7 +117,7 @@ template<
   typename _RandomAccessIterator,
   typename _Compare>
 _RandomAccessIterator
-__unguarded_partition(
+unguarded_partition(
   _RandomAccessIterator __first,
   _RandomAccessIterator __last,
   _RandomAccessIterator __pivot, _Compare __comp
@@ -142,7 +142,7 @@ template<
   typename _Compare>
 inline
 _RandomAccessIterator
-__unguarded_partition_pivot(
+unguarded_partition_pivot(
   _RandomAccessIterator __first,
   _RandomAccessIterator __last,
   _Compare __comp
@@ -158,7 +158,7 @@ template<
   typename _RandomAccessIterator,
   typename _Compare>
 void
-__heap_select(
+heap_select(
   _RandomAccessIterator __first,
   _RandomAccessIterator __middle,
   _RandomAccessIterator __last,
@@ -170,28 +170,13 @@ __heap_select(
       std::__pop_heap(__first, __middle, __i, __comp);
 }
 
-/// This is a helper function...
-template<
-  typename _RandomAccessIterator,
-  typename _Compare>
-inline
-_RandomAccessIterator
-__unguarded_partition_pivot(
-  _RandomAccessIterator __first,
-  _RandomAccessIterator __last,
-  _Compare __comp
-){
-  _RandomAccessIterator __mid = __first + (__last - __first) / 2;
-  std::__move_median_to_first(__first, __first + 1, __mid, __last - 1, __comp);
-  return std::__unguarded_partition(__first + 1, __last, __first, __comp);
-}
 
 template<
   typename _RandomAccessIterator,
   typename _Compare>
 inline
 void
-__partial_sort(
+SCP_partial_sort(
   _RandomAccessIterator __first,
   _RandomAccessIterator __middle,
   _RandomAccessIterator __last,
@@ -208,7 +193,7 @@ template<
   typename _Size,
   typename _Compare>
 void
-__introsort_loop(
+introsort_loop(
   _RandomAccessIterator __first,
   _RandomAccessIterator __last,
   _Size __depth_limit,
@@ -216,12 +201,12 @@ __introsort_loop(
 ){
   while (__last - __first > int(_S_threshold)){
     if (__depth_limit == 0){
-      std::__partial_sort(__first, __last, __last, __comp);
+      SCP_partial_sort(__first, __last, __last, __comp);
       return;
     }
     --__depth_limit;
-    _RandomAccessIterator __cut = std::__unguarded_partition_pivot(__first, __last, __comp);
-    std::__introsort_loop(__cut, __last, __depth_limit, __comp);
+    _RandomAccessIterator __cut = unguarded_partition_pivot(__first, __last, __comp);
+    introsort_loop(__cut, __last, __depth_limit, __comp);
     __last = __cut;
   }
 }
@@ -232,14 +217,14 @@ template<
   typename _Compare>
 inline
 void
-__sort(
+sort_impl(
   _RandomAccessIterator __first,
   _RandomAccessIterator __last,
   _Compare __comp
 ){
   if (__first != __last){
-    std::__introsort_loop(__first, __last, std::__lg(__last - __first) * 2, __comp);
-    std::__final_insertion_sort(__first, __last, __comp);
+    introsort_loop(__first, __last, std::__lg(__last - __first) * 2, __comp);
+    final_insertion_sort(__first, __last, __comp);
   }
 }
 
@@ -266,7 +251,7 @@ introsort(
   _RandomAccessIterator __first,
   _RandomAccessIterator __last
 ){
-  std::__sort(__first, __last, __gnu_cxx::__ops::__iter_less_iter());
+  sort_impl(__first, __last, __gnu_cxx::__ops::__iter_less_iter());
 }
 
 
@@ -295,5 +280,7 @@ introsort(
   _RandomAccessIterator __last,
   _Compare __comp
 ){
-  std::__sort(__first, __last, __gnu_cxx::__ops::__iter_comp_iter(__comp));
+  sort_impl(__first, __last, __gnu_cxx::__ops::__iter_comp_iter(__comp));
 }
+
+};

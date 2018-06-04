@@ -60,7 +60,7 @@ void (*get_sort_func_ptr(
     switch(args.chosen_sort){
       case std_sort:        return std::sort;
       case std_stable_sort: return std::stable_sort;
-      case introsort:       return introsort;
+      case introsort:       return SCP::introsort;
       case timsort:         return madlib::timsort;
       case null:            return null_sort;
       default: exit(-3);

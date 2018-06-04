@@ -167,6 +167,10 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
           cout << "Cannot test multiple sorts in the same run." << endl;
           if(args->chosen_sort == undefined_sort){
             cout << "HE AWAKENS" << endl;
+          }else if(args->chosen_sort == std_sort){
+            cout << "Previously set to std_sort" << endl;
+          }else if(args->chosen_sort == std_stable_sort){
+            cout << "Previously set to std_stable_sort" << endl;
           }else if(args->chosen_sort == introsort){
             cout << "Previously set to introsort" << endl;
           }else if(args->chosen_sort == timsort){
