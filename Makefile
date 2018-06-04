@@ -19,11 +19,12 @@ CXX = g++
 
 all: $(OBJECTS) $(HEADERS)
 	git submodule init madlib
-	#https://github.com/anadon/madlib
+	git submodule update madlib
 	$(CXX) $(CPP_RELEASE_FLAGS) $(OBJECTS) -o $(EXEC)
 
 debug: $(OBJECTS) $(HEADERS)
-	git submodule init https://github.com/anadon/madlib
+	git submodule init madlib
+	git submodule update madlib
 	$(CXX) $(CPP_DEBUG_FLAGS) $(OBJECTS) -o $(EXEC)
 
 clean:
