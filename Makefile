@@ -3,6 +3,8 @@ HEADERS = data_preparation.hpp \
           parse_arguments.hpp \
           sort_abstracter.hpp
 
+DEPENDENCIES = madlib/include
+
 SOURCES = main.cpp
 
 OBJECTS = main.o
@@ -17,18 +19,19 @@ EXEC = SCP
 
 CXX = g++
 
-all: $(OBJECTS) $(HEADERS)
-	git submodule init madlib
-	git submodule update madlib
+all: $(DEPENDENCIES) $(OBJECTS) $(HEADERS)
 	$(CXX) $(CPP_RELEASE_FLAGS) $(OBJECTS) -o $(EXEC)
 
-debug: $(OBJECTS) $(HEADERS)
-	git submodule init madlib
-	git submodule update madlib
+debug: $(DEPENDENCIES) $(OBJECTS) $(HEADERS)
 	$(CXX) $(CPP_DEBUG_FLAGS) $(OBJECTS) -o $(EXEC)
 
 clean:
 	rm -f a.out gmon.* *.o $(EXEC) $(OBJECTS)
+
+$(DEPENDENCIES):
+	git submodule init madlib
+	git submodule update madlib
+
 
 $(OBJECTS):$(SOURCES)
 	$(CXX) $(CPP_DEBUG_FLAGS) -c $< -o $@
