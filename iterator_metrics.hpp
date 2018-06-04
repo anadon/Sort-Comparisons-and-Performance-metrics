@@ -719,43 +719,51 @@ public:
 public:
 
 
-    distance_counter<RandomAccessIterator, Distance>&
-    operator++(
-    ){
-      ++distance_counter__increments;
-      ++current;
-      return *this;
-    }
+  distance_counter<RandomAccessIterator, Distance>&
+  operator++(
+  ){
+    ++distance_counter__increments;
+    ++current;
+    return *this;
+  }
 
 
-    distance_counter<RandomAccessIterator, Distance>
-    operator++(
-      int
-    ){
-      distance_counter<RandomAccessIterator, Distance> tmp = *this;
-      ++distance_counter__increments;
-      ++current;
-      return tmp;
-    }
+  distance_counter<RandomAccessIterator, Distance>
+  operator++(
+    int
+  ){
+    distance_counter<RandomAccessIterator, Distance> tmp = *this;
+    ++distance_counter__increments;
+    ++current;
+    return tmp;
+  }
 
 
-    distance_counter<RandomAccessIterator, Distance>&
-    operator--(){
-      ++distance_counter__increments;
-      --current;
-      return *this;
-    }
+  operator
+  int(
+  ) const {
+    ++distance_counter__conversions;
+    return current;
+  }
 
 
-    distance_counter<RandomAccessIterator, Distance>
-    operator--(
-      int
-    ){
-      distance_counter<RandomAccessIterator, Distance> tmp = *this;
-      ++distance_counter__increments;
-      --current;
-      return tmp;
-    }
+  distance_counter<RandomAccessIterator, Distance>&
+  operator--(){
+    ++distance_counter__increments;
+    --current;
+    return *this;
+  }
+
+
+  distance_counter<RandomAccessIterator, Distance>
+  operator--(
+    int
+  ){
+    distance_counter<RandomAccessIterator, Distance> tmp = *this;
+    ++distance_counter__increments;
+    --current;
+    return tmp;
+  }
 
   distance_counter(
   ) : generation(0) {
@@ -790,7 +798,7 @@ public:
   ){
     current = x.current;
     generation = x.generation + 1;
-    ++distance_counter__copy_constructions;
+    ++distance_counter__assignments;
     if (generation > distance_counter__max_generation) {
       distance_counter__max_generation = generation;
     }
@@ -798,17 +806,19 @@ public:
   }
 
 
-  Distance
-  base(
-  ) const {
-    return current;
+  distance_counter<RandomAccessIterator, Distance>&
+  operator=(
+    const Distance& x
+  ){
+    current = x;
+    ++distance_counter__assignments;
+    return *this;
   }
 
 
-  operator
-  int(
+  Distance
+  base(
   ) const {
-    ++distance_counter__conversions;
     return current;
   }
 
