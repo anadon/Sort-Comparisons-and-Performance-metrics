@@ -21,12 +21,15 @@ then
   LENGTHS=( )
 
   #Calculate out sizes to test from 1 entry to ~1,000,000,000 entries.
-  for i in $(seq 1 28) ;
-  do
-    LENGTHS+=( $(( 2**$i )) )
-  done
+  #for i in $(seq 1 28) ;
+  #do
+  #  LENGTHS+=( $(( 2**$i )) )
+  #done
+  #But for development, only worry about 512
+  LENGTHS+=( 512 )
 
-  NUM_TRIALS=7
+  #While developing use 2, else 7
+  NUM_TRIALS=2
 
   ALREADY_SETUP="true"
 
