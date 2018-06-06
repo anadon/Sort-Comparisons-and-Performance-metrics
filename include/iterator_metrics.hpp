@@ -816,6 +816,16 @@ public:
   }
 
 
+  distance_counter<RandomAccessIterator, Distance>&
+  operator=(
+    const int& x
+  ){
+    current = Distance(x);
+    ++distance_counter__assignments;
+    return *this;
+  }
+
+
   Distance
   base(
   ) const {
