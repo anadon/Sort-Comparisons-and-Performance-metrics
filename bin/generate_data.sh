@@ -48,9 +48,10 @@ for SORT in ${SORTS[@]} ; do
           INSTANCE_ARGS="--container=$CONTAINER --length=$LENGTH --sort-type=$SORT --test=$ORDERING"
           mkdir -p "$ITR_PATH"
           mkdir -p "$RUN_PATH"
+          mkdir -p "$CPU_PATH"
           ./SCP --enable-interator-metrics=true --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING" >> "$ITR_PATH/$LENGTH.tsv"
           /usr/bin/time -v -o "$RUN_PATH/$LENGTH.tsv" -a ./SCP --enable-interator-metrics=false --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING"
-          valgrind --tool=cachegrind ./SCP --enable-interator-metrics=false --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING" >> "$CPU_PATH/$LENGTH.tsv"
+          valgrind --tool=cachegrind --cachegrind-out-file=/dev/null ./SCP --enable-interator-metrics=false --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING" 2> "$CPU_PATH/$LENGTH.tsv"
         done
         echo "done!"
       done
