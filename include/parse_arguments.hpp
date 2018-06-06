@@ -114,7 +114,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
 
         if(!strcmp("sorted", arg)){
           args->chosen_test = sorted;
-        }else if(!strcmp("reverse-sorted", arg)){
+        }else if(!strcmp("reverse_sorted", arg)){
           args->chosen_test = reverse_sorted;
         }else if(!strcmp("random_order", arg)){
           args->chosen_test = random_order;
