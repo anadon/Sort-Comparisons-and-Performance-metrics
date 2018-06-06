@@ -69,29 +69,29 @@ using std::setiosflags;
 using std::setw;
 
 
-static ssize_t iteration_counter__constructions = 0;
-static ssize_t iteration_counter__assignments = 0;
-static ssize_t iteration_counter__increments = 0;
-static ssize_t iteration_counter__dereferences = 0;
-static ssize_t iteration_counter__bigjumps = 0;
-static ssize_t iteration_counter__comparisons = 0;
-static ssize_t iteration_counter__max_generation = 0;
+static ssize_t iteration_counter_constructions = 0;
+static ssize_t iteration_counter_assignments = 0;
+static ssize_t iteration_counter_increments = 0;
+static ssize_t iteration_counter_dereferences = 0;
+static ssize_t iteration_counter_bigjumps = 0;
+static ssize_t iteration_counter_comparisons = 0;
+static ssize_t iteration_counter_max_generation = 0;
 
-static ssize_t counter__assignments = 0;
-static ssize_t counter__comparisons = 0;
-static ssize_t counter__accesses = 0;
+static ssize_t counter_assignments = 0;
+static ssize_t counter_comparisons = 0;
+static ssize_t counter_accesses = 0;
 
-static ssize_t distance_counter__constructions = 0;
-static ssize_t distance_counter__copy_constructions = 0;
-static ssize_t distance_counter__conversions = 0;
-static ssize_t distance_counter__assignments = 0;
-static ssize_t distance_counter__increments = 0;
-static ssize_t distance_counter__additions = 0;
-static ssize_t distance_counter__subtractions = 0;
-static ssize_t distance_counter__multiplications = 0;
-static ssize_t distance_counter__divisions = 0;
-static ssize_t distance_counter__comparisons = 0;
-static ssize_t distance_counter__max_generation = 0;
+static ssize_t distance_counter_constructions = 0;
+static ssize_t distance_counter_copy_constructions = 0;
+static ssize_t distance_counter_conversions = 0;
+static ssize_t distance_counter_assignments = 0;
+static ssize_t distance_counter_increments = 0;
+static ssize_t distance_counter_additions = 0;
+static ssize_t distance_counter_subtractions = 0;
+static ssize_t distance_counter_multiplications = 0;
+static ssize_t distance_counter_divisions = 0;
+static ssize_t distance_counter_comparisons = 0;
+static ssize_t distance_counter_max_generation = 0;
 
 
 
@@ -112,14 +112,14 @@ public:
   T
   base(
   ) const {
-    ++counter__accesses;
+    ++counter_accesses;
     return value;
   }
 
 
   counter(
   ) : value(T()) {
-    ++counter__assignments;
+    ++counter_assignments;
   }
 
 
@@ -127,14 +127,14 @@ public:
   counter(
     const T& v
   ) : value(v) {
-    ++counter__assignments;
+    ++counter_assignments;
   }
 
 
   counter(
     const counter<T>& x
   ) : value(x.value) {
-    ++counter__assignments;
+    ++counter_assignments;
   }
 
 
@@ -144,7 +144,7 @@ public:
     const counter<T>& x,
     const counter<T>& y
   ){
-    ++counter__comparisons;
+    ++counter_comparisons;
     return x.value < y.value;
   }
 
@@ -155,7 +155,7 @@ public:
     const counter<T>& x,
     const counter<T>& y
   ){
-    ++counter__comparisons;
+    ++counter_comparisons;
     return x.value <= y.value;
   }
 
@@ -166,7 +166,7 @@ public:
     const counter<T>& x,
     const counter<T>& y
   ){
-    ++counter__comparisons;
+    ++counter_comparisons;
     return x.value > y.value;
   }
 
@@ -177,7 +177,7 @@ public:
     const counter<T>& x,
     const counter<T>& y
   ){
-    ++counter__comparisons;
+    ++counter_comparisons;
     return x.value >= y.value;
   }
 
@@ -188,7 +188,7 @@ public:
     const counter<T>& x,
     const counter<T>& y
   ){
-    ++counter__comparisons;
+    ++counter_comparisons;
     return x.value == y.value;
   }
 
@@ -199,7 +199,7 @@ public:
     const counter<T>& x,
     const counter<T>& y
   ){
-    ++counter__comparisons;
+    ++counter_comparisons;
     return x.value != y.value;
   }
 
@@ -210,7 +210,7 @@ operator<(
   const counter<T>& x,
   const T& y
 ){
-  ++counter__comparisons;
+  ++counter_comparisons;
   return x.value < y;
 }
 
@@ -221,7 +221,7 @@ operator<=(
   const counter<T>& x,
   const T& y
 ){
-  ++counter__comparisons;
+  ++counter_comparisons;
   return x.value <= y;
 }
 
@@ -232,7 +232,7 @@ operator>(
   const counter<T>& x,
   const T& y
 ){
-  ++counter__comparisons;
+  ++counter_comparisons;
   return x.value > y;
 }
 
@@ -243,7 +243,7 @@ operator>=(
   const counter<T>& x,
   const T& y
 ){
-  ++counter__comparisons;
+  ++counter_comparisons;
   return x.value >= y;
 }
 
@@ -254,7 +254,7 @@ operator==(
   const counter<T>& x,
   const T& y
 ){
-  ++counter__comparisons;
+  ++counter_comparisons;
   return x.value == y;
 }
 
@@ -265,7 +265,7 @@ operator!=(
   const counter<T>& x,
   const T& y
 ){
-  ++counter__comparisons;
+  ++counter_comparisons;
   return x.value != y;
 }
 
@@ -276,7 +276,7 @@ operator<(
   const T& x,
   const counter<T>& y
 ){
-  ++counter__comparisons;
+  ++counter_comparisons;
   return x < y.value;
 }
 
@@ -287,7 +287,7 @@ operator<=(
   const T& x,
   const counter<T>& y
 ){
-  ++counter__comparisons;
+  ++counter_comparisons;
   return x <= y.value;
 }
 
@@ -298,7 +298,7 @@ operator>(
   const T& x,
   const counter<T>& y
 ){
-  ++counter__comparisons;
+  ++counter_comparisons;
   return x > y.value;
 }
 
@@ -309,7 +309,7 @@ operator>=(
   const T& x,
   const counter<T>& y
 ){
-  ++counter__comparisons;
+  ++counter_comparisons;
   return x >= y.value;
 }
 
@@ -320,7 +320,7 @@ operator==(
   const T& x,
   const counter<T>& y
 ){
-  ++counter__comparisons;
+  ++counter_comparisons;
   return x == y.value;
 }
 
@@ -331,7 +331,7 @@ operator!=(
   const T& x,
   const counter<T>& y
 ){
-  ++counter__comparisons;
+  ++counter_comparisons;
   return x != y.value;
 }
 
@@ -340,7 +340,7 @@ operator!=(
   operator=(
     const counter<T>& x
   ){
-    ++counter__assignments;
+    ++counter_assignments;
     value = x.value;
     return *this;
   }
@@ -371,343 +371,343 @@ class distance_counter {
 public:
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
   bool
   operator==(
-    const distance_counter<_RandomAccessIterator, _Distance>& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    const distance_counter<RandomAccessIterator_, Distance_>& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
   bool
   operator==(
-    const _Distance& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    const Distance_& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
   bool
   operator==(
-    const distance_counter<_RandomAccessIterator, _Distance>& x,
-    const _Distance& y
+    const distance_counter<RandomAccessIterator_, Distance_>& x,
+    const Distance_& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
   bool
   operator<(
-    const distance_counter<_RandomAccessIterator, _Distance>& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    const distance_counter<RandomAccessIterator_, Distance_>& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
   bool
   operator<(
-    const distance_counter<_RandomAccessIterator, _Distance>& x,
-    const _Distance& y
+    const distance_counter<RandomAccessIterator_, Distance_>& x,
+    const Distance_& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
   bool
   operator<(
-    const _Distance& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    const Distance_& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  _RandomAccessIterator
+  RandomAccessIterator_
   operator+(
-    const _RandomAccessIterator& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    const RandomAccessIterator_& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>
+  distance_counter<RandomAccessIterator_, Distance_>
   operator+(
-    const distance_counter<_RandomAccessIterator, _Distance>& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    const distance_counter<RandomAccessIterator_, Distance_>& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>
+  distance_counter<RandomAccessIterator_, Distance_>
   operator+(
-    const distance_counter<_RandomAccessIterator, _Distance>& x,
-    const _Distance& y
+    const distance_counter<RandomAccessIterator_, Distance_>& x,
+    const Distance_& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  _Distance
+  Distance_
   operator+(
-    const _Distance& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    const Distance_& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  _RandomAccessIterator&
+  RandomAccessIterator_&
   operator+=(
-    _RandomAccessIterator& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    RandomAccessIterator_& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>&
+  distance_counter<RandomAccessIterator_, Distance_>&
   operator+=(
-    distance_counter<_RandomAccessIterator, _Distance>& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    distance_counter<RandomAccessIterator_, Distance_>& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>&
+  distance_counter<RandomAccessIterator_, Distance_>&
   operator+=(
-    distance_counter<_RandomAccessIterator, _Distance>& x,
-    const _Distance& y
+    distance_counter<RandomAccessIterator_, Distance_>& x,
+    const Distance_& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>
+  distance_counter<RandomAccessIterator_, Distance_>
   operator-(
-    const distance_counter<_RandomAccessIterator, _Distance>& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    const distance_counter<RandomAccessIterator_, Distance_>& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>
+  distance_counter<RandomAccessIterator_, Distance_>
   operator-(
-    const distance_counter<_RandomAccessIterator, _Distance>& s,
-    const _Distance& n
+    const distance_counter<RandomAccessIterator_, Distance_>& s,
+    const Distance_& n
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>&
+  distance_counter<RandomAccessIterator_, Distance_>&
   operator-(
-    const _RandomAccessIterator& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    const RandomAccessIterator_& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  _RandomAccessIterator&
+  RandomAccessIterator_&
   operator-=(
-    _RandomAccessIterator& i,
-    const distance_counter<_RandomAccessIterator, _Distance>& x
+    RandomAccessIterator_& i,
+    const distance_counter<RandomAccessIterator_, Distance_>& x
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>&
+  distance_counter<RandomAccessIterator_, Distance_>&
   operator-=(
-    distance_counter<_RandomAccessIterator, _Distance>& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    distance_counter<RandomAccessIterator_, Distance_>& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>&
+  distance_counter<RandomAccessIterator_, Distance_>&
   operator-=(
-    distance_counter<_RandomAccessIterator, _Distance>& x,
-    const _Distance& y
+    distance_counter<RandomAccessIterator_, Distance_>& x,
+    const Distance_& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>
+  distance_counter<RandomAccessIterator_, Distance_>
   operator*(
-    const distance_counter<_RandomAccessIterator, _Distance>& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    const distance_counter<RandomAccessIterator_, Distance_>& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>
+  distance_counter<RandomAccessIterator_, Distance_>
   operator*(
-    const distance_counter<_RandomAccessIterator, _Distance>& x,
-    const _Distance& y
+    const distance_counter<RandomAccessIterator_, Distance_>& x,
+    const Distance_& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  _Distance
+  Distance_
   operator*(
-    const _Distance& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    const Distance_& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>&
+  distance_counter<RandomAccessIterator_, Distance_>&
   operator*=(
-    distance_counter<_RandomAccessIterator, _Distance>& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    distance_counter<RandomAccessIterator_, Distance_>& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>&
+  distance_counter<RandomAccessIterator_, Distance_>&
   operator*=(
-    distance_counter<_RandomAccessIterator, _Distance>& x,
-    const _Distance& y
+    distance_counter<RandomAccessIterator_, Distance_>& x,
+    const Distance_& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  _Distance&
+  Distance_&
   operator*=(
-    _Distance& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    Distance_& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>
+  distance_counter<RandomAccessIterator_, Distance_>
   operator/(
-    const distance_counter<_RandomAccessIterator, _Distance>& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    const distance_counter<RandomAccessIterator_, Distance_>& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>
+  distance_counter<RandomAccessIterator_, Distance_>
   operator/(
-    const distance_counter<_RandomAccessIterator, _Distance>& x,
-    const _Distance &y
+    const distance_counter<RandomAccessIterator_, Distance_>& x,
+    const Distance_ &y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  _Distance
+  Distance_
   operator/(
-    const _Distance &x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    const Distance_ &x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>&
+  distance_counter<RandomAccessIterator_, Distance_>&
   operator/=(
-    distance_counter<_RandomAccessIterator, _Distance>& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    distance_counter<RandomAccessIterator_, Distance_>& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  _Distance&
+  Distance_&
   operator/=(
-    _Distance& x,
-    const distance_counter<_RandomAccessIterator, _Distance>& y
+    Distance_& x,
+    const distance_counter<RandomAccessIterator_, Distance_>& y
   );
 
 
   template<
-    typename _RandomAccessIterator,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename Distance_>
   friend
-  distance_counter<_RandomAccessIterator, _Distance>&
+  distance_counter<RandomAccessIterator_, Distance_>&
   operator/=(
-    const distance_counter<_RandomAccessIterator, _Distance>& x,
-    const _Distance& y
+    const distance_counter<RandomAccessIterator_, Distance_>& x,
+    const Distance_& y
   );
 
 
@@ -722,7 +722,7 @@ public:
   distance_counter<RandomAccessIterator, Distance>&
   operator++(
   ){
-    ++distance_counter__increments;
+    ++distance_counter_increments;
     ++current;
     return *this;
   }
@@ -733,23 +733,23 @@ public:
     int
   ){
     distance_counter<RandomAccessIterator, Distance> tmp = *this;
-    ++distance_counter__increments;
+    ++distance_counter_increments;
     ++current;
     return tmp;
   }
 
-
+//*
   operator
   int(
   ) const {
-    ++distance_counter__conversions;
+    ++distance_counter_conversions;
     return current;
   }
-
+//*/
 
   distance_counter<RandomAccessIterator, Distance>&
   operator--(){
-    ++distance_counter__increments;
+    ++distance_counter_increments;
     --current;
     return *this;
   }
@@ -760,14 +760,14 @@ public:
     int
   ){
     distance_counter<RandomAccessIterator, Distance> tmp = *this;
-    ++distance_counter__increments;
+    ++distance_counter_increments;
     --current;
     return tmp;
   }
 
   distance_counter(
   ) : generation(0) {
-    ++distance_counter__constructions;
+    ++distance_counter_constructions;
   }
 
 
@@ -777,7 +777,7 @@ public:
   ){
     current = x;
     generation = 0;
-    ++distance_counter__conversions;
+    ++distance_counter_conversions;
   }
 
 
@@ -786,9 +786,9 @@ public:
   ){
     current = c.current;
     generation = c.generation + 1;
-    ++distance_counter__copy_constructions;
-    if (generation > distance_counter__max_generation) {
-      distance_counter__max_generation = generation;
+    ++distance_counter_copy_constructions;
+    if (generation > distance_counter_max_generation) {
+      distance_counter_max_generation = generation;
     }
   }
 
@@ -798,9 +798,9 @@ public:
   ){
     current = x.current;
     generation = x.generation + 1;
-    ++distance_counter__assignments;
-    if (generation > distance_counter__max_generation) {
-      distance_counter__max_generation = generation;
+    ++distance_counter_assignments;
+    if (generation > distance_counter_max_generation) {
+      distance_counter_max_generation = generation;
     }
     return *this;
   }
@@ -811,17 +811,7 @@ public:
     const Distance& x
   ){
     current = x;
-    ++distance_counter__assignments;
-    return *this;
-  }
-
-
-  distance_counter<RandomAccessIterator, Distance>&
-  operator=(
-    const int& x
-  ){
-    current = Distance(x);
-    ++distance_counter__assignments;
+    ++distance_counter_assignments;
     return *this;
   }
 
@@ -838,232 +828,232 @@ public:
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
 bool
 operator==(
-  const distance_counter<_RandomAccessIterator, _Distance>& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  const distance_counter<RandomAccessIterator_, Distance_>& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  ++distance_counter__comparisons;
+  ++distance_counter_comparisons;
   return x.current == y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
 bool
 operator==(
-  const _Distance& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  const Distance_& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  ++distance_counter__comparisons;
+  ++distance_counter_comparisons;
   return x == y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
 bool
 operator==(
-  const distance_counter<_RandomAccessIterator, _Distance>& x,
-  const _Distance& y
+  const distance_counter<RandomAccessIterator_, Distance_>& x,
+  const Distance_& y
 ){
-  ++distance_counter__comparisons;
+  ++distance_counter_comparisons;
   return x.current == y;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
 bool
 operator<(
-  const distance_counter<_RandomAccessIterator, _Distance>& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  const distance_counter<RandomAccessIterator_, Distance_>& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  ++distance_counter__comparisons;
+  ++distance_counter_comparisons;
   return x.current < y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
 bool
 operator<(
-  const distance_counter<_RandomAccessIterator, _Distance>& x,
-  const _Distance& y
+  const distance_counter<RandomAccessIterator_, Distance_>& x,
+  const Distance_& y
 ){
-  ++distance_counter__comparisons;
+  ++distance_counter_comparisons;
     return x.current < y;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
 bool
 operator<(
-  const _Distance& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  const Distance_& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  ++distance_counter__comparisons;
+  ++distance_counter_comparisons;
   return x < y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-_RandomAccessIterator
+  typename RandomAccessIterator_,
+  typename Distance_>
+RandomAccessIterator_
 operator+(
-  const _RandomAccessIterator& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  const RandomAccessIterator_& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  _RandomAccessIterator tmp(x);
+  RandomAccessIterator_ tmp(x);
   return tmp += y;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>
 operator+(
-  const distance_counter<_RandomAccessIterator, _Distance>& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  const distance_counter<RandomAccessIterator_, Distance_>& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  distance_counter<_RandomAccessIterator, _Distance> tmp(x);
+  distance_counter<RandomAccessIterator_, Distance_> tmp(x);
   return tmp += y;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>
 operator+(
-  const distance_counter<_RandomAccessIterator, _Distance>& x,
-  const _Distance& y
+  const distance_counter<RandomAccessIterator_, Distance_>& x,
+  const Distance_& y
 ){
-  distance_counter<_RandomAccessIterator, _Distance> tmp(x);
+  distance_counter<RandomAccessIterator_, Distance_> tmp(x);
   return tmp += y;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-_Distance
+  typename RandomAccessIterator_,
+  typename Distance_>
+Distance_
 operator+(
-  const _Distance& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  const Distance_& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  _Distance tmp(x);
+  Distance_ tmp(x);
   return tmp += y;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-_RandomAccessIterator&
+  typename RandomAccessIterator_,
+  typename Distance_>
+RandomAccessIterator_&
 operator+=(
-  _RandomAccessIterator& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  RandomAccessIterator_& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
   return x += y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>&
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>&
 operator+=(
-  distance_counter<_RandomAccessIterator, _Distance>& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  distance_counter<RandomAccessIterator_, Distance_>& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
   return x += y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>&
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>&
 operator+=(
-  distance_counter<_RandomAccessIterator, _Distance>& x,
-  const _Distance& y
+  distance_counter<RandomAccessIterator_, Distance_>& x,
+  const Distance_& y
 ){
-  ++distance_counter__additions;
+  ++distance_counter_additions;
   x.current += y;
   return x;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>
 operator-(
-  const distance_counter<_RandomAccessIterator, _Distance>& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  const distance_counter<RandomAccessIterator_, Distance_>& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  distance_counter<_RandomAccessIterator, _Distance> tmp(x);
+  distance_counter<RandomAccessIterator_, Distance_> tmp(x);
   return tmp -= y;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>
 operator-(
-  const distance_counter<_RandomAccessIterator, _Distance>& s,
-  const _Distance& n
+  const distance_counter<RandomAccessIterator_, Distance_>& s,
+  const Distance_& n
 ){
-  distance_counter<_RandomAccessIterator, _Distance> tmp(s);
+  distance_counter<RandomAccessIterator_, Distance_> tmp(s);
   return tmp -= n;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>&
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>&
 operator-(
-  const _RandomAccessIterator& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  const RandomAccessIterator_& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  _RandomAccessIterator tmp(x);
+  RandomAccessIterator_ tmp(x);
   return tmp -= y;
 }
 
 
 //NOTE: Counts as iterator, so pass it along
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-_RandomAccessIterator&
+  typename RandomAccessIterator_,
+  typename Distance_>
+RandomAccessIterator_&
 operator-=(
-  _RandomAccessIterator& i,
-  const distance_counter<_RandomAccessIterator, _Distance>& x
+  RandomAccessIterator_& i,
+  const distance_counter<RandomAccessIterator_, Distance_>& x
 ){
   return i -= x.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>&
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>&
 operator-=(
-  distance_counter<_RandomAccessIterator, _Distance>& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  distance_counter<RandomAccessIterator_, Distance_>& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
   return x -= y.current;
 }
@@ -1071,170 +1061,170 @@ operator-=(
 
 //NOTE: Key function
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>&
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>&
 operator-=(
-  distance_counter<_RandomAccessIterator, _Distance>& x,
-  const _Distance& y
+  distance_counter<RandomAccessIterator_, Distance_>& x,
+  const Distance_& y
 ){
-  ++distance_counter__subtractions;
+  ++distance_counter_subtractions;
   x.current -= y;
   return x;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>
 operator*(
-  const distance_counter<_RandomAccessIterator, _Distance>& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  const distance_counter<RandomAccessIterator_, Distance_>& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  distance_counter<_RandomAccessIterator, _Distance> tmp(x);
+  distance_counter<RandomAccessIterator_, Distance_> tmp(x);
   return x *= y;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>
 operator*(
-  const distance_counter<_RandomAccessIterator, _Distance>& x,
-  const _Distance& y
+  const distance_counter<RandomAccessIterator_, Distance_>& x,
+  const Distance_& y
 ){
-  distance_counter<_RandomAccessIterator, _Distance> tmp(x);
+  distance_counter<RandomAccessIterator_, Distance_> tmp(x);
   return tmp *= y;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-_Distance
+  typename RandomAccessIterator_,
+  typename Distance_>
+Distance_
 operator*(
-  const _Distance& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  const Distance_& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  _Distance tmp(x);
+  Distance_ tmp(x);
   return tmp *= y;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>&
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>&
 operator*=(
-  distance_counter<_RandomAccessIterator, _Distance>& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  distance_counter<RandomAccessIterator_, Distance_>& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
   return x *= y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>&
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>&
 operator*=(
-  distance_counter<_RandomAccessIterator, _Distance>& x,
-  const _Distance& y
+  distance_counter<RandomAccessIterator_, Distance_>& x,
+  const Distance_& y
 ){
-  ++distance_counter__multiplications;
+  ++distance_counter_multiplications;
   x.current *= y;
   return x;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-_Distance&
+  typename RandomAccessIterator_,
+  typename Distance_>
+Distance_&
 operator*=(
-  _Distance& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  Distance_& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  ++distance_counter__multiplications;
+  ++distance_counter_multiplications;
   return x *= y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>
 operator/(
-  const distance_counter<_RandomAccessIterator, _Distance>& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  const distance_counter<RandomAccessIterator_, Distance_>& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  distance_counter<_RandomAccessIterator, _Distance> tmp(x);
+  distance_counter<RandomAccessIterator_, Distance_> tmp(x);
   return tmp /= y;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>
 operator/(
-  const distance_counter<_RandomAccessIterator, _Distance>& x,
-  const _Distance &y
+  const distance_counter<RandomAccessIterator_, Distance_>& x,
+  const Distance_ &y
 ){
-  distance_counter<_RandomAccessIterator, _Distance> tmp(x);
+  distance_counter<RandomAccessIterator_, Distance_> tmp(x);
   return tmp /= y;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-_Distance
+  typename RandomAccessIterator_,
+  typename Distance_>
+Distance_
 operator/(
-  const _Distance &x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  const Distance_ &x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  _Distance tmp(x);
+  Distance_ tmp(x);
   return tmp /= y;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>&
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>&
 operator/=(
-  distance_counter<_RandomAccessIterator, _Distance>& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  distance_counter<RandomAccessIterator_, Distance_>& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
   return x /= y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-_Distance&
+  typename RandomAccessIterator_,
+  typename Distance_>
+Distance_&
 operator/=(
-  _Distance& x,
-  const distance_counter<_RandomAccessIterator, _Distance>& y
+  Distance_& x,
+  const distance_counter<RandomAccessIterator_, Distance_>& y
 ){
-  ++distance_counter__divisions;
+  ++distance_counter_divisions;
   return x /= y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _Distance>
-distance_counter<_RandomAccessIterator, _Distance>&
+  typename RandomAccessIterator_,
+  typename Distance_>
+distance_counter<RandomAccessIterator_, Distance_>&
 operator/=(
-  distance_counter<_RandomAccessIterator, _Distance>& x,
-  const _Distance& y
+  distance_counter<RandomAccessIterator_, Distance_>& x,
+  const Distance_& y
 ){
-  ++distance_counter__divisions;
+  ++distance_counter_divisions;
   x.current /= y;
   return x;
 }
@@ -1264,63 +1254,63 @@ class iteration_counter : public iterator_traits<RandomAccessIterator> {
 
 
   template <
-    typename _RandomAccessIterator,
-    typename _T,
-    typename _Reference,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename T_,
+    typename Reference_,
+    typename Distance_>
   friend
   bool
   operator==(
-    const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
-    const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y);
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y);
 
 
   template <
-    typename _RandomAccessIterator,
-    typename _T,
-    typename _Reference,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename T_,
+    typename Reference_,
+    typename Distance_>
   friend
   bool
   operator!=(
-    const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
-    const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y);
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y);
 
 
   template <
-    typename _RandomAccessIterator,
-    typename _T,
-    typename _Reference,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename T_,
+    typename Reference_,
+    typename Distance_>
   friend
   bool
   operator<(
-    const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
-    const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y);
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y);
 
 
   template <
-    typename _RandomAccessIterator,
-    typename _T,
-    typename _Reference,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename T_,
+    typename Reference_,
+    typename Distance_>
   friend
   self
   operator+(
-    const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
-    const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y);
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y);
 
 
   template <
-    typename _RandomAccessIterator,
-    typename _T,
-    typename _Reference,
-    typename _Distance>
+    typename RandomAccessIterator_,
+    typename T_,
+    typename Reference_,
+    typename Distance_>
   friend
-  _Distance
+  Distance_
   operator-(
-    const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
-    const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y);
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y);
 
 
 protected:
@@ -1330,7 +1320,7 @@ public:
 
   iteration_counter(
   ) : generation(0) {
-    ++iteration_counter__constructions;
+    ++iteration_counter_constructions;
   }
 
 
@@ -1339,7 +1329,7 @@ public:
   ){
     current = x;
     generation = 0;
-    ++iteration_counter__constructions;
+    ++iteration_counter_constructions;
   }
 
 
@@ -1348,9 +1338,9 @@ public:
   ){
     current = c.current;
     generation = c.generation + 1;
-    ++iteration_counter__constructions;
-    if (generation > iteration_counter__max_generation) {
-      iteration_counter__max_generation = generation;
+    ++iteration_counter_constructions;
+    if (generation > iteration_counter_max_generation) {
+      iteration_counter_max_generation = generation;
     }
   }
 
@@ -1365,7 +1355,7 @@ public:
   Reference
   operator*(
   ) const {
-    ++iteration_counter__dereferences;
+    ++iteration_counter_dereferences;
     return *current;
   }
 
@@ -1373,7 +1363,7 @@ public:
   self&
   operator++(
   ){
-    ++iteration_counter__increments;
+    ++iteration_counter_increments;
     ++current;
     return *this;
   }
@@ -1384,7 +1374,7 @@ public:
     int
   ){
     self copy(*this);
-    ++iteration_counter__increments;
+    ++iteration_counter_increments;
     ++current;
     return copy;
   }
@@ -1393,7 +1383,7 @@ public:
   self&
   operator--(
   ){
-    ++iteration_counter__increments;
+    ++iteration_counter_increments;
     --current;
     return *this;
   }
@@ -1404,7 +1394,7 @@ public:
     int
   ){
     self copy = *this;
-    ++iteration_counter__increments;
+    ++iteration_counter_increments;
     --current;
     return copy;
   }
@@ -1440,7 +1430,7 @@ public:
   operator+=(
     const Distance& n
   ){
-    ++iteration_counter__bigjumps;
+    ++iteration_counter_bigjumps;
     current += n;
     return *this;
   }
@@ -1476,7 +1466,7 @@ public:
   operator-=(
     const Distance& n
   ) {
-    ++iteration_counter__bigjumps;
+    ++iteration_counter_bigjumps;
     current -= n;
     return *this;
   }
@@ -1494,7 +1484,7 @@ public:
   operator[](
     const Distance& n
   ){
-    iteration_counter__dereferences++;
+    iteration_counter_dereferences++;
     return *(*this + n);
   }
 
@@ -1502,121 +1492,121 @@ public:
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _T,
-  typename _Reference,
-  typename _Distance>
+  typename RandomAccessIterator_,
+  typename T_,
+  typename Reference_,
+  typename Distance_>
 bool
 operator==(
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y
 ){
-  ++iteration_counter__comparisons;
+  ++iteration_counter_comparisons;
   return x.current == y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _T,
-  typename _Reference,
-  typename _Distance>
+  typename RandomAccessIterator_,
+  typename T_,
+  typename Reference_,
+  typename Distance_>
 bool
 operator!=(
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y
 ){
   return !(x == y);
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _T,
-  typename _Reference,
-  typename _Distance>
+  typename RandomAccessIterator_,
+  typename T_,
+  typename Reference_,
+  typename Distance_>
 bool
 operator<(
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y
 ){
-   ++iteration_counter__comparisons;
+   ++iteration_counter_comparisons;
    return x.current < y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _T,
-  typename _Reference,
-  typename _Distance>
+  typename RandomAccessIterator_,
+  typename T_,
+  typename Reference_,
+  typename Distance_>
 bool
 operator<=(
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y
 ){
-   ++iteration_counter__comparisons;
+   ++iteration_counter_comparisons;
    return x.current <= y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _T,
-  typename _Reference,
-  typename _Distance>
+  typename RandomAccessIterator_,
+  typename T_,
+  typename Reference_,
+  typename Distance_>
 bool
 operator>=(
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y
 ){
-   ++iteration_counter__comparisons;
+   ++iteration_counter_comparisons;
    return x.current >= y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _T,
-  typename _Reference,
-  typename _Distance>
+  typename RandomAccessIterator_,
+  typename T_,
+  typename Reference_,
+  typename Distance_>
 bool
 operator>(
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y
 ){
-   ++iteration_counter__comparisons;
+   ++iteration_counter_comparisons;
    return x.current > y.current;
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _T,
-  typename _Reference,
-  typename _Distance>
-_Distance
+  typename RandomAccessIterator_,
+  typename T_,
+  typename Reference_,
+  typename Distance_>
+Distance_
 operator-(
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x,
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& y
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y
 ){
-  ++iteration_counter__bigjumps;
-  return _Distance(x.current - y.current);
+  ++iteration_counter_bigjumps;
+  return Distance_(x.current - y.current);
 }
 
 
 template <
-  typename _RandomAccessIterator,
-  typename _T,
-  typename _Reference,
-  typename _Distance>
-iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>
+  typename RandomAccessIterator_,
+  typename T_,
+  typename Reference_,
+  typename Distance_>
+iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>
 operator+(
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& n,
-  const iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>& x
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& n,
+  const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x
 ){
-  ++iteration_counter__bigjumps;
-  return iteration_counter<_RandomAccessIterator, _T, _Reference, _Distance>(x.current + n.current);
+  ++iteration_counter_bigjumps;
+  return iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>(x.current + n.current);
 }
 
 
@@ -1654,53 +1644,53 @@ void print_iterator_stats(
 
   std::vector<ssize_t> op_counts;
 
-  op_counts.push_back(counter__assignments);
-  op_counts.push_back(counter__comparisons);
-  op_counts.push_back(counter__accesses);
+  op_counts.push_back(counter_assignments);
+  op_counts.push_back(counter_comparisons);
+  op_counts.push_back(counter_accesses);
 
-  op_counts.push_back(distance_counter__constructions);
-  op_counts.push_back(distance_counter__copy_constructions);
-  op_counts.push_back(distance_counter__conversions);
-  op_counts.push_back(distance_counter__assignments);
-  op_counts.push_back(distance_counter__increments);
-  op_counts.push_back(distance_counter__additions);
-  op_counts.push_back(distance_counter__subtractions);
-  op_counts.push_back(distance_counter__multiplications);
-  op_counts.push_back(distance_counter__divisions);
-  op_counts.push_back(distance_counter__comparisons);
-  op_counts.push_back(distance_counter__max_generation);
+  op_counts.push_back(distance_counter_constructions);
+  op_counts.push_back(distance_counter_copy_constructions);
+  op_counts.push_back(distance_counter_conversions);
+  op_counts.push_back(distance_counter_assignments);
+  op_counts.push_back(distance_counter_increments);
+  op_counts.push_back(distance_counter_additions);
+  op_counts.push_back(distance_counter_subtractions);
+  op_counts.push_back(distance_counter_multiplications);
+  op_counts.push_back(distance_counter_divisions);
+  op_counts.push_back(distance_counter_comparisons);
+  op_counts.push_back(distance_counter_max_generation);
 
-  op_counts.push_back(iteration_counter__constructions);
-  op_counts.push_back(iteration_counter__assignments);
-  op_counts.push_back(iteration_counter__increments);
-  op_counts.push_back(iteration_counter__dereferences);
-  op_counts.push_back(iteration_counter__bigjumps);
-  op_counts.push_back(iteration_counter__comparisons);
-  op_counts.push_back(iteration_counter__max_generation);
+  op_counts.push_back(iteration_counter_constructions);
+  op_counts.push_back(iteration_counter_assignments);
+  op_counts.push_back(iteration_counter_increments);
+  op_counts.push_back(iteration_counter_dereferences);
+  op_counts.push_back(iteration_counter_bigjumps);
+  op_counts.push_back(iteration_counter_comparisons);
+  op_counts.push_back(iteration_counter_max_generation);
 
   //int_least64_t total = std::accumulate(op_counts.begin(), op_counts.end(), 0);
   ssize_t total =
-      counter__assignments
-    + counter__comparisons
-    + counter__accesses
-    + distance_counter__constructions
-    + distance_counter__copy_constructions
-    + distance_counter__conversions
-    + distance_counter__assignments
-    + distance_counter__increments
-    + distance_counter__additions
-    + distance_counter__subtractions
-    + distance_counter__multiplications
-    + distance_counter__divisions
-    + distance_counter__comparisons
-    + distance_counter__max_generation
-    + iteration_counter__constructions
-    + iteration_counter__assignments
-    + iteration_counter__increments
-    + iteration_counter__dereferences
-    + iteration_counter__bigjumps
-    + iteration_counter__comparisons
-    + iteration_counter__max_generation;
+      counter_assignments
+    + counter_comparisons
+    + counter_accesses
+    + distance_counter_constructions
+    + distance_counter_copy_constructions
+    + distance_counter_conversions
+    + distance_counter_assignments
+    + distance_counter_increments
+    + distance_counter_additions
+    + distance_counter_subtractions
+    + distance_counter_multiplications
+    + distance_counter_divisions
+    + distance_counter_comparisons
+    + distance_counter_max_generation
+    + iteration_counter_constructions
+    + iteration_counter_assignments
+    + iteration_counter_increments
+    + iteration_counter_dereferences
+    + iteration_counter_bigjumps
+    + iteration_counter_comparisons
+    + iteration_counter_max_generation;
   op_counts.push_back(total);
 
   //cout << setiosflags(ios::fixed);
