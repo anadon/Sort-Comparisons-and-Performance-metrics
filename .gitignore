@@ -3,3 +3,4 @@ sortperf
 gmon.*
 SCP
 bin/data
+bin/tmp_data
