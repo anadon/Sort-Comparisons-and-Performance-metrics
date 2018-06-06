@@ -1,30 +1,43 @@
-HEADERS = data_preparation.hpp \
-          iterator_metrics.hpp \
-          parse_arguments.hpp \
-          sort_abstracter.hpp
+#!/usr/bin/make
+
+HEADERS = include/data_preparation.hpp \
+          include/iterator_metrics.hpp \
+          include/parse_arguments.hpp \
+          include/sort_abstracter.hpp \
+          include/introsort.hpp
 
 DEPENDENCIES = madlib/include
 
-SOURCES = main.cpp
+SOURCES = src/main.cpp
 
-CPP_FLAGS = --std=c++17 -Imadlib/include/
+BASE_PATH = $(shell pwd)
 
-CPP_RELEASE_FLAGS = $(CPP_FLAGS) -O3 -march=native
+CPP_COMMON_FLAGS = --std=c++17 -I$(BASE_PATH)/madlib/include/ -I$(BASE_PATH)/include/
 
-CPP_DEBUG_FLAGS = $(CPP_FLAGS) -DSCP_DEBUG -O0 -ggdb -Wall -Wextra -Wpedantic
+CPP_RELEASE_FLAGS = $(CPP_COMMON_FLAGS) -O3 -march=native
 
-EXEC = SCP
+CPP_DEBUG_FLAGS = $(CPP_COMMON_FLAGS) -DSCP_DEBUG -O0 -ggdb -Wall -Wextra -Wpedantic
+
+EXEC = $(BASE_PATH)/bin/SCP
 
 CXX = g++
 
-all: $(DEPENDENCIES) $(SOURCES) $(HEADERS)
-	$(CXX) $(CPP_RELEASE_FLAGS) $(SOURCES) -o $(EXEC)
+export
 
-debug: $(DEPENDENCIES) $(SOURCES) $(HEADERS)
-	$(CXX) $(CPP_DEBUG_FLAGS) $(SOURCES) -o $(EXEC)
+all: release
+
+release: CPP_FLAGS=$(CPP_RELEASE_FLAGS)
+release: $(EXEC)
+
+debug: CPP_FLAGS=$(CPP_DEBUG_FLAGS)
+debug: $(EXEC)
+
+$(EXEC): $(DEPENDENCIES) $(SOURCES) $(HEADERS)
+	cd src ; make
 
 clean:
-	rm -f a.out gmon.* *.o $(EXEC) $(OBJECTS)
+	rm -f a.out gmon.* *.o $(EXEC)
+	cd src ; make clean
 
 $(DEPENDENCIES):
 	git submodule init madlib

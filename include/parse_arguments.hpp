@@ -85,7 +85,7 @@ const char *doc = "This is the 'sort-performance-comparison' tool, developed to 
 
 
 static struct argp_option options[] = {
-  {"test", 't', "STRING", 0, "Perform one of the following specified tests: sorted, reserse_sorted, random_order, median_of_three_killer, stdin.  This must be specified once.", 0},
+  {"test", 't', "STRING", 0, "Perform one of the following specified tests: sorted, reverse_sorted, random_order, median_of_three_killer, stdin.  This must be specified once.", 0},
   {"length", 'l', "INT", 0, "Specify the size of the data to test with a sort.  This argument is required for 'sorted', 'reverse-sorted', 'random_order', and 'median_of_three_killer'.  It is optional for 'stdin'.  This may only be specified once, and must be a positive integer value.", 0},
   {"sort-type", 's', "STRING", 0, "Specify the sort to use on the input data.  Currently supported sorts are 'std_sort', 'std_stable_sort', 'introsort', 'timsort' and 'null'.  The 'null' option is intended to be an option to allow measurement of the overhead of setting up incurred by the program in order to allow more accurate evaluation and comparison of the other sort functions.", 0},
   {"container", 'c', "STRING", 0, "Specify the underlying container type from the Standard Template Library to use.  Be aware that not every sort can use every container type, so you must be aware of the different underlying differences.  For most cases, this should be set to 'vector'.", 0},
@@ -114,7 +114,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
 
         if(!strcmp("sorted", arg)){
           args->chosen_test = sorted;
-        }else if(!strcmp("reserse-sorted", arg)){
+        }else if(!strcmp("reverse-sorted", arg)){
           args->chosen_test = reverse_sorted;
         }else if(!strcmp("random_order", arg)){
           args->chosen_test = random_order;
@@ -218,7 +218,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
   //      }else if(!strcmp("list", arg)){
   //        args->chosen_container = list_;
         }else{
-          cout << "Unrecognized container type" << endl;
+          cout << "Unrecognized container type \"" << arg << "\"" << endl;
           exit(EINVAL);
         }
       }

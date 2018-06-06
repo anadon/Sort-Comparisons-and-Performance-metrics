@@ -118,7 +118,11 @@ int main(int argc, char **argv){
 
   config run_config = {undefined_sort, undefined_test, undefined_container, 0};
 
-  argp_parse(&interpreter, argc, argv, 0, 0, &run_config);
+  error_t results = argp_parse(&interpreter, argc, argv, 0, 0, &run_config);
+  if(results != 0){
+    cout << "Undefined errors parsing input; exiting." << endl;
+    return results;
+  }
 
   #ifdef SCP_DEBUG
   cout << "Got configuration, running analysis" << endl;
