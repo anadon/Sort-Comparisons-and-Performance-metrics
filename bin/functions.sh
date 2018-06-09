@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-if [ ALREADY_SETUP != "true" ]
+if [ ALREADY_SETUP != true ]
 then
 
   function print_array {
@@ -14,7 +14,7 @@ then
 
 
   #introsort ignored at this time because it is implemented as std_sort
-  SORTS=( null std_sort std_stable_sort timsort )
+  SORTS=( null std_sort std_stable_sort sequential_timsort gfx_timsort tvs_timsort )
   #deque omitted because it is slower and seems to be a little unstable
   CONTAINERS=( vector )
   ORDERINGS=( sorted reverse_sorted random_order median_of_three_killer )
@@ -31,6 +31,15 @@ then
   #While developing use 2, else 7
   NUM_TRIALS=2
 
-  ALREADY_SETUP="true"
+  #These are the particular things to run, like gathering iterator metrics,
+  #timing and memory information from gnu time, cache profiling from valgrind
+  # --tool=callgrind, perf, or anything else that gets added.
+  TEST_ITERATOR_METRICS=false
+  TEST_TIME_AND_MEMORY=true
+  TEST_CALLGRIND=false
+  TEST_PERF=false
+
+
+  ALREADY_SETUP=true
 
 fi

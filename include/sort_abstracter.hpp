@@ -23,6 +23,7 @@ with "Sort Performance Comparison".  If not, see <http://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include "timsort.hpp"
+#include "other_timsorts.hpp"
 
 #include "introsort.hpp"
 
@@ -58,10 +59,13 @@ void (*get_sort_func_ptr(
   RandomAccessItertor
 ){
     switch(args.chosen_sort){
-      case std_sort:        return std::sort;
-      case std_stable_sort: return std::stable_sort;
-      case introsort:       return SCP::introsort;
-      case timsort:         return madlib::timsort;
+      case std_sort:           return std::sort;
+      case std_stable_sort:    return std::stable_sort;
+      case introsort:          return SCP::introsort;
+      case sequential_timsort: return madlib::timsort;
+      //case parallel_timsort:   return madlib::timsort;
+      case gfx_timsort:        return gfx::timsort;
+      case tvs_timsort:        return tim::timsort;
       case null:            return null_sort;
       default: exit(-3);
     };

@@ -1288,6 +1288,40 @@ class iteration_counter : public iterator_traits<RandomAccessIterator> {
     const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
     const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y);
 
+  template <
+    typename RandomAccessIterator_,
+    typename T_,
+    typename Reference_,
+    typename Distance_>
+  friend
+  bool
+  operator<=(
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y);
+
+
+  template <
+    typename RandomAccessIterator_,
+    typename T_,
+    typename Reference_,
+    typename Distance_>
+  friend
+  bool
+  operator>(
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y);
+
+  template <
+    typename RandomAccessIterator_,
+    typename T_,
+    typename Reference_,
+    typename Distance_>
+  friend
+  bool
+  operator>=(
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& x,
+    const iteration_counter<RandomAccessIterator_, T_, Reference_, Distance_>& y);
+
 
   template <
     typename RandomAccessIterator_,
@@ -1703,14 +1737,34 @@ void print_iterator_stats(
   cout << endl;
 
   switch(args.chosen_sort){
+    case std_sort:
+      {
+        cout << "built in std::sort";
+      }
+      break;
+    case std_stable_sort:
+      {
+        cout << "built in std::stable_sort";
+      }
+      break;
     case introsort:
       {
         cout << "introsort";
       }
       break;
-    case timsort:
+    case sequential_timsort:
       {
-        cout << "timsort";
+        cout << "sequential timsort";
+      }
+      break;
+    case gfx_timsort:
+      {
+        cout << "GFX's timsort";
+      }
+      break;
+    case tvs_timsort:
+      {
+        cout << "Timothy Van Slyke's timsort";
       }
       break;
     default:

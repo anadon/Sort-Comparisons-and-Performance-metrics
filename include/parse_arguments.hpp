@@ -36,7 +36,9 @@ enum sort_type{
   std_sort,
   std_stable_sort,
   introsort,
-  timsort,
+  sequential_timsort,
+  gfx_timsort,
+  tvs_timsort,
   null
 };
 
@@ -87,7 +89,7 @@ const char *doc = "This is the 'sort-performance-comparison' tool, developed to 
 static struct argp_option options[] = {
   {"test", 't', "STRING", 0, "Perform one of the following specified tests: sorted, reverse_sorted, random_order, median_of_three_killer, stdin.  This must be specified once.", 0},
   {"length", 'l', "INT", 0, "Specify the size of the data to test with a sort.  This argument is required for 'sorted', 'reverse-sorted', 'random_order', and 'median_of_three_killer'.  It is optional for 'stdin'.  This may only be specified once, and must be a positive integer value.", 0},
-  {"sort-type", 's', "STRING", 0, "Specify the sort to use on the input data.  Currently supported sorts are 'std_sort', 'std_stable_sort', 'introsort', 'timsort' and 'null'.  The 'null' option is intended to be an option to allow measurement of the overhead of setting up incurred by the program in order to allow more accurate evaluation and comparison of the other sort functions.", 0},
+  {"sort-type", 's', "STRING", 0, "Specify the sort to use on the input data.  Currently supported sorts are 'std_sort', 'std_stable_sort', 'introsort', 'sequential_timsort', 'gfx_timsort', 'tvs_timsort', and 'null'.  The 'null' option is intended to be an option to allow measurement of the overhead of setting up incurred by the program in order to allow more accurate evaluation and comparison of the other sort functions.", 0},
   {"container", 'c', "STRING", 0, "Specify the underlying container type from the Standard Template Library to use.  Be aware that not every sort can use every container type, so you must be aware of the different underlying differences.  For most cases, this should be set to 'vector'.", 0},
   {"enable-interator-metrics", 'i', "STRING", OPTION_ARG_OPTIONAL, "Default: disabled.  Track various metrics related to iterator operations to better understand what kind of operations a sort is doing, and allow direct comparison of the performance of various operations between sorts.  This can be turned on with 'enable' or 'true', and explicitly disabled with 'disable' or 'false'.", 0},
   { 0 , 0, 0, 0, 0, 0}
@@ -165,22 +167,6 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
         }
         if(args->chosen_sort != undefined_sort){
           cout << "Cannot test multiple sorts in the same run." << endl;
-          if(args->chosen_sort == undefined_sort){
-            cout << "HE AWAKENS" << endl;
-          }else if(args->chosen_sort == std_sort){
-            cout << "Previously set to std_sort" << endl;
-          }else if(args->chosen_sort == std_stable_sort){
-            cout << "Previously set to std_stable_sort" << endl;
-          }else if(args->chosen_sort == introsort){
-            cout << "Previously set to introsort" << endl;
-          }else if(args->chosen_sort == timsort){
-            cout << "Previously set to timsort" << endl;
-          }else if(args->chosen_sort == null){
-            cout << "Previously set to null" << endl;
-          }else{
-            cout << "Totally undefined state" << endl;
-          }
-
           exit(EINVAL);
         }
 
@@ -190,8 +176,12 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
           args->chosen_sort = std_stable_sort;
         }else if(!strcmp("introsort", arg)){
           args->chosen_sort = introsort;
-        }else if(!strcmp("timsort", arg)){
-          args->chosen_sort = timsort;
+        }else if(!strcmp("sequential_timsort", arg)){
+          args->chosen_sort = sequential_timsort;
+        }else if(!strcmp("gfx_timsort", arg)){
+          args->chosen_sort = gfx_timsort;
+        }else if(!strcmp("tvs_timsort", arg)){
+          args->chosen_sort = tvs_timsort;
         }else if(!strcmp("null", arg)){
           args->chosen_sort = null;
         }else{
