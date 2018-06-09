@@ -13,9 +13,7 @@ SOURCES = src/main.cpp
 BASE_PATH = $(shell pwd)
 
 CPP_COMMON_FLAGS = --std=c++17 -I$(BASE_PATH)/include/ \
-                   -I$(BASE_PATH)/madlib/include/ \
-                   -I$(BASE_PATH)/timsort-cpp/include/ \
-                   -I$(BASE_PATH)/cpp-TimSort/include/
+                   -I$(BASE_PATH)/madlib/include/
 
 CPP_RELEASE_FLAGS = $(CPP_COMMON_FLAGS) -O3 -march=native
 
