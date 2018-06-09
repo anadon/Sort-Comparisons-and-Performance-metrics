@@ -1,3 +1,9 @@
 [submodule "madlib"]
 	path = madlib
 	url = https://github.com/anadon/madlib
+[submodule "cpp-TimSort"]
+	path = cpp-TimSort
+	url = https://github.com/gfx/cpp-TimSort
+[submodule "timsort-cpp"]
+	path = timsort-cpp
+	url = https://github.com/tvanslyke/timsort-cpp/
