@@ -75,7 +75,7 @@ for SORT in ${SORTS[@]} ; do
             echo -n '.'
             CPU_PATH="tmp_data/cpudata/$SORT/$CONTAINER/$ORDERING/"
             mkdir -p "$CPU_PATH"
-            valgrind --tool=cachegrind --cachegrind-out-file=/dev/null ./SCP --enable-interator-metrics=false --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING" 2> "$CPU_PATH/$LENGTH.tsv"
+            valgrind --tool=cachegrind --cachegrind-out-file=/dev/null ./SCP --enable-interator-metrics=false --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING" 2>> "$CPU_PATH/$LENGTH.tsv"
           fi
           if [ $TEST_PERF = true ] ; then
             echo -n '.'
