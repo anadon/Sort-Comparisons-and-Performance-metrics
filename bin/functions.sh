@@ -1,7 +1,7 @@
 #!/bin/bash
+# shellcheck disable=SC2034
 
-
-if [ ALREADY_SETUP != true ]
+if [ "$ALREADY_SETUP" != true ]
 then
 
   function print_array {
@@ -35,7 +35,7 @@ then
     #Calculate out sizes to test from 1 entry to ~1,000,000,000 entries.
     for i in $(seq 1 28) ;
     do
-      LENGTHS+=( $(( 2**$i )) )
+      LENGTHS+=( $(( 2**i )) )
     done
 
     #While developing use 2, else 7
@@ -60,7 +60,7 @@ then
     #LENGTHS=( 512 )
     for i in $(seq 1 28) ;
     do
-      LENGTHS+=( $(( 2**$i )) )
+      LENGTHS+=( $(( 2**i )) )
     done
 
     NUM_TRIALS=7
