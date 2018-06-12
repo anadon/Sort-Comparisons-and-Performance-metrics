@@ -23,7 +23,7 @@ then
 
   DEV_SETTINGS=true
 
-  if [ "$DEV_SETTINGS" = false ] ; then
+  if [ "$DEV_SETTINGS" == false ] ; then
 
     #introsort ignored at this time because it is implemented as std_sort
     SORTS=( null std_sort std_stable_sort sequential_timsort gfx_timsort tvs_timsort )

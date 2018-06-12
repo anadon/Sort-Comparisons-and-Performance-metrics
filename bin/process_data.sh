@@ -42,11 +42,11 @@ for SORT in "${SORTS[@]}" ; do
     for ORDERING in "${ORDERINGS[@]}" ; do
       TESTING_PATH="$CONTAINER/$ORDERING/$SORT"
 
-        if [ "$TEST_ITERATOR_METRICS" = true ] ; then
+        if [ "$TEST_ITERATOR_METRICS" == true ] ; then
           #$ITR_PATH="tmp_data/itrdata/$SORT/$CONTAINER/$ORDERING/$LENGTH.tsv"
           echo "NOT IMPLEMENTED"
         fi
-        if [ "$TEST_CPU_AND_MEMORY" = true ] ; then
+        if [ "$TEST_CPU_AND_MEMORY" == true ] ; then
           #Create pmem.dat and pcpu.dat, Peak Memory and Percentage CPU resp.
           #pull apart the columns.  Avg. % CPU first, then peak memory
           RUN_PATH_CPU="tmp_data/rundata/$TESTING_PATH/cpu_points.dat"
@@ -54,15 +54,15 @@ for SORT in "${SORTS[@]}" ; do
           printf 'LENGTH\t%s' "$SORT" > "$RUN_PATH_CPU"
           printf 'LENGTH\t%s' "$SORT" > "$RUN_PATH_MEM"
         fi
-        if [ "$TEST_TIME" = true ] ; then
+        if [ "$TEST_TIME" == true ] ; then
           TIME_PATH="tmp_data/timedata/$TESTING_PATH/points.dat"
           printf 'LENGTH\t%s' "$SORT" > "$TIME_PATH"
         fi
-        if [ "$TEST_CALLGRIND" = true ] ; then
+        if [ "$TEST_CALLGRIND" == true ] ; then
           CPU_PATH="tmp_data/cpudata/$TESTING_PATH/points.dat"
           printf 'LENGTH\t%s' "$SORT" > "$CPU_PATH"
         fi
-        #if [ $TEST_PERF = true ] ; then
+        #if [ $TEST_PERF == true ] ; then
           #echo "NOT IMPLEMENTED"
         #fi
       done
@@ -83,11 +83,11 @@ for SORT in "${SORTS[@]}" ; do
       for LENGTH in "${LENGTHS[@]}" ; do
         echo "Selecting data"
 
-        if [ "$TEST_ITERATOR_METRICS" = true ] ; then
+        if [ "$TEST_ITERATOR_METRICS" == true ] ; then
           #$ITR_PATH="tmp_data/itrdata/$SORT/$CONTAINER/$ORDERING/$LENGTH.tsv"
           echo "NOT IMPLEMENTED"
         fi
-        if [ "$TEST_CPU_AND_MEMORY" = true ] ; then
+        if [ "$TEST_CPU_AND_MEMORY" == true ] ; then
           #Create pmem.dat and pcpu.dat, Peak Memory and Percentage CPU resp.
           #pull apart the columns.  Avg. % CPU first, then peak memory
           INPUT_PATH="tmp_data/rundata/$TESTING_PATH/$LENGTH.tsv"
@@ -96,18 +96,18 @@ for SORT in "${SORTS[@]}" ; do
           printf '%d\t%d\n' "$LENGTH" "$(median "$(awk '{print $1}' "$INPUT_PATH" | tr '\n' '\t')")" >> "$OUTPUT_CPU"
           printf '%d\t%d\n' "$LENGTH" "$(median "$(awk '{print $2}' "$INPUT_PATH" | tr '\n' '\t')")" >> "$OUTPUT_MEM"
         fi
-        if [ "$TEST_TIME" = true ] ; then
+        if [ "$TEST_TIME" == true ] ; then
           RUN_PATH="tmp_data/timedata/$TESTING_PATH/$LENGTH.tsv"
           OUTPUT_PATH="tmp_data/timedata/$TESTING_PATH/points.dat"
           printf '%d\t%d\n' "$LENGTH" "$(median "$(tr '\n' '\t' < "$RUN_PATH" )" )" >> "$OUTPUT_PATH"
         fi
-        #if [ $TEST_CALLGRIND = true ] ; then
+        #if [ $TEST_CALLGRIND == true ] ; then
           #TODO: NOT IMPLEMENTED
           #$CPU_PATH="tmp_data/cpudata/$TESTING_PATH/$LENGTH.tsv"
           #$OUTPUT_PATH="tmp_data/cpudata/$TESTING_PATH/points.dat"
 
         #fi
-        #if [ $TEST_PERF = true ] ; then
+        #if [ $TEST_PERF == true ] ; then
           #TODO: NOT IMPLEMENTED
         #fi
       done
@@ -132,40 +132,40 @@ for CONTAINER in "${CONTAINERS[@]}" ; do
     # Build up paths of files
     for SORT in "${SORTS[@]}" ; do
       TESTING_PATH="$CONTAINER/$ORDERING/$SORT"
-      if [ "$TEST_ITERATOR_METRICS" = true ] ; then
+      if [ "$TEST_ITERATOR_METRICS" == true ] ; then
         ITR_PATH+=("tmp_data/itrdata/$TESTING_PATH/points.dat")
       fi
-      if [ "$TEST_CPU_AND_MEMORY" = true ] ; then
+      if [ "$TEST_CPU_AND_MEMORY" == true ] ; then
         CPU_PATH+=("tmp_data/rundata/$TESTING_PATH/cpu_points.dat")
         MEM_PATH+=("tmp_data/rundata/$TESTING_PATH/mem_points.dat")
       fi
-      if [ "$TEST_TIME" = true ] ; then
+      if [ "$TEST_TIME" == true ] ; then
         TIME_PATH+=("tmp_data/timedata/$TESTING_PATH/points.dat")
       fi
-      if [ "$TEST_CALLGRIND" = true ] ; then
+      if [ "$TEST_CALLGRIND" == true ] ; then
         CACHE_PATH+=("tmp_data/cpudata/$TESTING_PATH/points.dat")
       fi
-      if [ "$TEST_PERF" = true ] ; then
+      if [ "$TEST_PERF" == true ] ; then
         echo "NOT IMPLEMENTED"
       fi
     done
 
     # merge files of interest
     COMPILED_TESTS_PATH="$CONTAINER/$ORDERING"
-    if [ "$TEST_ITERATOR_METRICS" = true ] ; then
+    if [ "$TEST_ITERATOR_METRICS" == true ] ; then
         recursive_join "${ITR_PATH[@]}" > "tmp_data/itrdata/$COMPILED_TESTS_PATH/compiled_points.dat"
     fi
-    if [ "$TEST_CPU_AND_MEMORY" = true ] ; then
+    if [ "$TEST_CPU_AND_MEMORY" == true ] ; then
         recursive_join "${CPU_PATH[@]}" > "tmp_data/rundate/$COMPILED_TESTS_PATH/cpu_compiled_points.dat"
         recursive_join "${MEM_PATH[@]}" > "tmp_data/rundata/$COMPILED_TESTS_PATH/mem_compiled_points.dat"
     fi
-    if [ "$TEST_TIME" = true ] ; then
+    if [ "$TEST_TIME" == true ] ; then
         recursive_join "${TIME_PATH[@]}" > "tmp_data/timedata/$COMPILED_TESTS_PATH/compiled_points.dat"
     fi
-    if [ "$TEST_CALLGRIND" = true ] ; then
+    if [ "$TEST_CALLGRIND" == true ] ; then
         recursive_join "${CACHE_PATH[@]}" > "tmp_data/cpudata/$COMPILED_TESTS_PATH/compiled_points.dat"
     fi
-    #if [ $TEST_PERF = true ] ; then
+    #if [ $TEST_PERF == true ] ; then
       #TODO: NOT IMPLEMENTED
     #fi
   done

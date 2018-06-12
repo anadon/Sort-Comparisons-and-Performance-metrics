@@ -90,7 +90,7 @@ for SORT in "${SORTS[@]}" ; do
         CACHE_PATH="tmp_data/cpudata/$TESTING_PATH"
         mkdir -p "$CACHE_PATH"
       fi
-      if [ "$TEST_PERF" = true ] ; then
+      if [ "$TEST_PERF" == true ] ; then
         PERF_PATH="tmp_data/cpudata/$TESTING_PATH"
         mkdir -p "$PERF_PATH"
       fi
@@ -138,7 +138,7 @@ for SORT in "${SORTS[@]}" ; do
         #NOTE: CALLGRIND is entirely a simulation, and so multiple runs return
         #identical results.  However, this is an excellent opportubity to
         #compare against perf's results.
-        if [ "$TEST_CALLGRIND" = true ] ; then
+        if [ "$TEST_CALLGRIND" == true ] ; then
           echo -n '.'
           CPU_PATH="tmp_data/cpudata/$TESTING_PATH"
           valgrind --tool=cachegrind --cachegrind-out-file=/dev/null ./SCP --enable-interator-metrics=false --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING" 2>> "$CPU_PATH/$LENGTH.tsv"
