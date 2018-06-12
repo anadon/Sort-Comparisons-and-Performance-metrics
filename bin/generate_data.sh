@@ -1,4 +1,6 @@
 #!/bin/bash
+# shellcheck disable=SC1091
+# shellcheck disable=SC2153
 
 #Some code pulled from:
 #https://stackoverflow.com/questions/16959337/usr-bin-time-format-output-elapsed-time-in-milliseconds
@@ -31,16 +33,16 @@ print_array "${ORDERINGS[@]}"
 echo -n "Lengths: "
 print_array "${LENGTHS[@]}"
 
-if [ $TEST_ITERATOR_METRICS == true ] ; then
+if [ "$TEST_ITERATOR_METRICS" == true ] ; then
   echo "Testing using built in iterator metrics"
 fi
-if [ $TEST_TIME_AND_MEMORY == true ] ; then
+if [ "$TEST_TIME_AND_MEMORY" == true ] ; then
   echo "Testing using time"
 fi
-if [ $TEST_CALLGRIND == true ] ; then
+if [ "$TEST_CALLGRIND" == true ] ; then
   echo "Testing using callgrind"
 fi
-if [ $TEST_PERF == true ] ; then
+if [ "$TEST_PERF" == true ] ; then
   echo "Testing using perf"
 fi
 
@@ -67,24 +69,24 @@ echo "Starting tests"
 # Prepare the directories ######################################################
 ################################################################################
 
-for SORT in ${SORTS[@]} ; do
-  for CONTAINER in ${CONTAINERS[@]} ; do
-    for ORDERING in ${ORDERINGS[@]} ; do
+for SORT in "${SORTS[@]}" ; do
+  for CONTAINER in "${CONTAINERS[@]}" ; do
+    for ORDERING in "${ORDERINGS[@]}" ; do
       TESTING_PATH="$CONTAINER/$ORDERING/$SORT"
 
-      if [ $TEST_ITERATOR_METRICS = true ] ; then
+      if [ "$TEST_ITERATOR_METRICS" == true ] ; then
         ITR_PATH="tmp_data/itrdata/$TESTING_PATH"
         mkdir -p "$ITR_PATH"
       fi
-      if [ $TEST_CPU_AND_MEMORY = true ] ; then
+      if [ "$TEST_CPU_AND_MEMORY" == true ] ; then
         CPU_AND_MEM_PATH="tmp_data/rundata/$TESTING_PATH"
         mkdir -p "$CPU_AND_MEM_PATH"
       fi
-      if [ "$TEST_TIME" = true ] ; then
+      if [ "$TEST_TIME" == true ] ; then
         TIME_PATH="tmp_data/timedata/$TESTING_PATH"
         mkdir -p "$TIME_PATH"
       fi
-      if [ "$TEST_CALLGRIND" = true ] ; then
+      if [ "$TEST_CALLGRIND" == true ] ; then
         CACHE_PATH="tmp_data/cpudata/$TESTING_PATH"
         mkdir -p "$CACHE_PATH"
       fi
@@ -100,35 +102,35 @@ done
 # Conduct Tests ################################################################
 ################################################################################
 
-for SORT in ${SORTS[@]} ; do
-  for CONTAINER in ${CONTAINERS[@]} ; do
-    for ORDERING in ${ORDERINGS[@]} ; do
-      for LENGTH in ${LENGTHS[@]} ; do
+for SORT in "${SORTS[@]}" ; do
+  for CONTAINER in "${CONTAINERS[@]}" ; do
+    for ORDERING in "${ORDERINGS[@]}" ; do
+      for LENGTH in "${LENGTHS[@]}" ; do
         echo "Running test for sort '$SORT' on data type '$CONTAINER' with $ORDERING elements of length $LENGTH "
         echo -n "Trial: "
         TESTING_PATH="$CONTAINER/$ORDERING/$SORT"
-        for REP in $(seq 1 $NUM_TRIALS) ; do
+        for REP in $(seq 1 "$NUM_TRIALS") ; do
           echo -n "$REP."
 
-          if [ $TEST_ITERATOR_METRICS = true ] ; then
+          if [ "$TEST_ITERATOR_METRICS" == true ] ; then
             echo -n '.'
             ITR_PATH="tmp_data/itrdata/$TESTING_PATH"
             ./SCP --enable-interator-metrics=true --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING" >> "$ITR_PATH/$LENGTH.tsv"
           fi
-          if [ $TEST_CPU_AND_MEMORY = true ] ; then
+          if [ "$TEST_CPU_AND_MEMORY" == true ] ; then
             #TODO: this one can actually be more appropriately split up more.
             echo -n '.'
             CPU_AND_MEM_PATH="tmp_data/rundata/$TESTING_PATH"
             /usr/bin/time -f '%P\t%M' -o "$CPU_AND_MEM_PATH/$LENGTH.tsv" -a ./SCP --enable-interator-metrics=false --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING"
           fi
-          if [ $TEST_TIME = true ] ; then
+          if [ "$TEST_TIME" == true ] ; then
             echo -n '.'
             TIME_PATH="tmp_data/timedata/$TESTING_PATH"
             ts=$(date +%s%N)
             ./SCP --enable-interator-metrics=false --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING"
-            echo $(($(date +%s%N) - $ts)) >> "$TIME_PATH/$LENGTH.tsv"
+            echo $(($(date +%s%N) - ts)) >> "$TIME_PATH/$LENGTH.tsv"
           fi
-          if [ $TEST_PERF = true ] ; then
+          if [ "$TEST_PERF" == true ] ; then
             echo -n '.'
             #TODO: NOT IMPLEMENTED
           fi
@@ -136,7 +138,7 @@ for SORT in ${SORTS[@]} ; do
         #NOTE: CALLGRIND is entirely a simulation, and so multiple runs return
         #identical results.  However, this is an excellent opportubity to
         #compare against perf's results.
-        if [ $TEST_CALLGRIND = true ] ; then
+        if [ "$TEST_CALLGRIND" = true ] ; then
           echo -n '.'
           CPU_PATH="tmp_data/cpudata/$TESTING_PATH"
           valgrind --tool=cachegrind --cachegrind-out-file=/dev/null ./SCP --enable-interator-metrics=false --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING" 2>> "$CPU_PATH/$LENGTH.tsv"
