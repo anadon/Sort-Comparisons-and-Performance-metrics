@@ -36,8 +36,11 @@ print_array "${LENGTHS[@]}"
 if [ "$TEST_ITERATOR_METRICS" == true ] ; then
   echo "Testing using built in iterator metrics"
 fi
-if [ "$TEST_TIME_AND_MEMORY" == true ] ; then
-  echo "Testing using time"
+if [ "$TEST_CPU_AND_MEMORY" == true ] ; then
+  echo "Testing memory and CPU usage"
+fi
+if [ "$TEST_TIME" == true ] ; then
+  echo "Testing timing information"
 fi
 if [ "$TEST_CALLGRIND" == true ] ; then
   echo "Testing using callgrind"
@@ -45,6 +48,8 @@ fi
 if [ "$TEST_PERF" == true ] ; then
   echo "Testing using perf"
 fi
+
+    TEST_TIME=true
 
 echo "Each of the above possible combinations will run for $NUM_TRIALS trials"
 
@@ -149,5 +154,5 @@ for SORT in "${SORTS[@]}" ; do
   done
 done
 
-cp -R tmp_data/* data/*
-rm -r tmp_data
+cp -R tmp_data data
+#rm -r tmp_data

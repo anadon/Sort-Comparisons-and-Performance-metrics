@@ -1,4 +1,4 @@
 #!/bin/bash
 
-./generate_data.sh
-#./process_data.sh
+source generate_data.sh
+source process_data.sh

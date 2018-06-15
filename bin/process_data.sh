@@ -1,42 +1,50 @@
 #!/bin/bash
 #Some code lifted from:
-#https://stackoverflow.com/questions/41750008/get-median-of-unsorted-array-in-one-line-of-bash
+#https://stackoverflow.com/questions/41750008/
+#get-median-of-unsorted-array-in-one-line-of-bash
 #https://stackoverflow.com/questions/10726471/join-multiple-files
+#https://stackoverflow.com/questions/21524585/
+#gnuplot-can-i-put-all-the-settings-for-a-plot-in-a-file-and-call-it-before-th
 
 # shellcheck disable=SC1091
+# shellcheck disable=SC2153
 source functions.sh
-
-setup_variables
 
 
 function median {
-  mapfile -t arr < <(printf '%d\n' "${@}" | sort -n)
+  mapfile -t arr < <(sort <<< "${@}")
   nel=${#arr[@]}
   if (( nel % 2 == 1 )); then     # Odd number of elements
-    val="arr[ $((nel/2)) ]"
+    val="${arr[ $((nel/2)) ]}"
   else                            # Even number of elements
     (( j=nel/2 ))
     (( k=j-1 ))
-    (( val=(arr[j] + arr[k])/2 ))
+    (( vall=arr[j] ))
+    (( valr=arr[k] ))
+    (( val=(vall + valr)/2 ))
   fi
-  echo $val
+  echo "$val"
 }
 
 
 function recursive_join {
-  if [ $# -eq 1 ]; then
-    join - "$1"
+  #print_array "${@}"
+  #echo "Joining $1" 2>&1
+  if [ $# -eq 2 ]; then
+    echo "Joining commencing" 2>&1
+    join -j 1 --nocheck-order "$1" "$2"
   else
     f=$1; shift
-    join - "$f" | join_rec "$@"
+    recursive_join "$@" | join -j 1 --nocheck-order - "$f"
   fi
 }
+
 
 ################################################################################
 # Prepare files ################################################################
 ################################################################################
 
-## shellcheck disable=SC2153
+echo "Preparing files"
 for SORT in "${SORTS[@]}" ; do
   for CONTAINER in "${CONTAINERS[@]}" ; do
     for ORDERING in "${ORDERINGS[@]}" ; do
@@ -51,16 +59,16 @@ for SORT in "${SORTS[@]}" ; do
           #pull apart the columns.  Avg. % CPU first, then peak memory
           RUN_PATH_CPU="tmp_data/rundata/$TESTING_PATH/cpu_points.dat"
           RUN_PATH_MEM="tmp_data/rundata/$TESTING_PATH/mem_points.dat"
-          printf 'LENGTH\t%s' "$SORT" > "$RUN_PATH_CPU"
-          printf 'LENGTH\t%s' "$SORT" > "$RUN_PATH_MEM"
+          printf 'LENGTH\t%s\n' "$SORT" > "$RUN_PATH_CPU"
+          printf 'LENGTH\t%s\n' "$SORT" > "$RUN_PATH_MEM"
         fi
         if [ "$TEST_TIME" == true ] ; then
           TIME_PATH="tmp_data/timedata/$TESTING_PATH/points.dat"
-          printf 'LENGTH\t%s' "$SORT" > "$TIME_PATH"
+          printf 'LENGTH\t%s\n' "$SORT" > "$TIME_PATH"
         fi
         if [ "$TEST_CALLGRIND" == true ] ; then
           CPU_PATH="tmp_data/cpudata/$TESTING_PATH/points.dat"
-          printf 'LENGTH\t%s' "$SORT" > "$CPU_PATH"
+          printf 'LENGTH\t%s\n' "$SORT" > "$CPU_PATH"
         fi
         #if [ $TEST_PERF == true ] ; then
           #echo "NOT IMPLEMENTED"
@@ -76,12 +84,12 @@ done
 #Here we take the median for each trial, and combine each length for each
 #combination of sort, container, and sequence ordering.  This is done in this
 #particular way for later when the sorts are combined.
+echo "Selecting and combinging data from trials"
 for SORT in "${SORTS[@]}" ; do
   for CONTAINER in "${CONTAINERS[@]}" ; do
     for ORDERING in "${ORDERINGS[@]}" ; do
       TESTING_PATH="$CONTAINER/$ORDERING/$SORT"
       for LENGTH in "${LENGTHS[@]}" ; do
-        echo "Selecting data"
 
         if [ "$TEST_ITERATOR_METRICS" == true ] ; then
           #$ITR_PATH="tmp_data/itrdata/$SORT/$CONTAINER/$ORDERING/$LENGTH.tsv"
@@ -93,13 +101,16 @@ for SORT in "${SORTS[@]}" ; do
           INPUT_PATH="tmp_data/rundata/$TESTING_PATH/$LENGTH.tsv"
           OUTPUT_CPU="tmp_data/rundata/$TESTING_PATH/cpu_points.dat"
           OUTPUT_MEM="tmp_data/rundata/$TESTING_PATH/mem_points.dat"
-          printf '%d\t%d\n' "$LENGTH" "$(median "$(awk '{print $1}' "$INPUT_PATH" | tr '\n' '\t')")" >> "$OUTPUT_CPU"
-          printf '%d\t%d\n' "$LENGTH" "$(median "$(awk '{print $2}' "$INPUT_PATH" | tr '\n' '\t')")" >> "$OUTPUT_MEM"
+          CPU_MEDIAN="$(median "$(awk '{print $1}' "$INPUT_PATH" )" )"
+          MEM_MEDIAN="$(median "$(awk '{print $2}' "$INPUT_PATH" )" )"
+          printf '%d\t%d\n' "$LENGTH" "$CPU_MEDIAN" >> "$OUTPUT_CPU"
+          printf '%d\t%d\n' "$LENGTH" "$MEM_MEDIAN" >> "$OUTPUT_MEM"
         fi
         if [ "$TEST_TIME" == true ] ; then
           RUN_PATH="tmp_data/timedata/$TESTING_PATH/$LENGTH.tsv"
           OUTPUT_PATH="tmp_data/timedata/$TESTING_PATH/points.dat"
-          printf '%d\t%d\n' "$LENGTH" "$(median "$(tr '\n' '\t' < "$RUN_PATH" )" )" >> "$OUTPUT_PATH"
+          MEDIAN="$(median "$(tr '\t' '\n' < "$RUN_PATH" )" )"
+          printf '%d\t%d\n' "$LENGTH" "$MEDIAN" >> "$OUTPUT_PATH"
         fi
         #if [ $TEST_CALLGRIND == true ] ; then
           #TODO: NOT IMPLEMENTED
@@ -111,7 +122,6 @@ for SORT in "${SORTS[@]}" ; do
           #TODO: NOT IMPLEMENTED
         #fi
       done
-      echo "done!"
     done
   done
 done
@@ -119,7 +129,7 @@ done
 ################################################################################
 # Combine points files for sorts to the results are suitable for use ###########
 ################################################################################
-
+echo "Merging data from tests"
 for CONTAINER in "${CONTAINERS[@]}" ; do
   for ORDERING in "${ORDERINGS[@]}" ; do
     ITR_PATH=()
@@ -153,20 +163,58 @@ for CONTAINER in "${CONTAINERS[@]}" ; do
     # merge files of interest
     COMPILED_TESTS_PATH="$CONTAINER/$ORDERING"
     if [ "$TEST_ITERATOR_METRICS" == true ] ; then
-        recursive_join "${ITR_PATH[@]}" > "tmp_data/itrdata/$COMPILED_TESTS_PATH/compiled_points.dat"
+      DATA_PATH="tmp_data/itrdata/$COMPILED_TESTS_PATH/compiled_points.dat"
+      recursive_join "${ITR_PATH[@]}" > "$DATA_PATH"
+      #$1=path to data
+      #$2=title
+      #$3=x axis label
+      #$4=y axis label
+      #$5=save file location
+      TITLE="Iterator metrics on $ORDERING data in a $CONTAINER"
+      XLABEL="Number of Elements"
+      YLABEL="Number of Iterator Operations"
+      SAVE_PATH="iterator_metrics_$ORDERING""_""$CONTAINER.eps"
+      plot_wrapper "$DATA_PATH" "$TITLE" "$XLABEL" "$YLABEL" "$SAVE_PATH"
     fi
     if [ "$TEST_CPU_AND_MEMORY" == true ] ; then
-        recursive_join "${CPU_PATH[@]}" > "tmp_data/rundate/$COMPILED_TESTS_PATH/cpu_compiled_points.dat"
-        recursive_join "${MEM_PATH[@]}" > "tmp_data/rundata/$COMPILED_TESTS_PATH/mem_compiled_points.dat"
+      CPU_DATA="tmp_data/rundate/$COMPILED_TESTS_PATH/cpu_compiled_points.dat"
+      MEM_DATA="tmp_data/rundata/$COMPILED_TESTS_PATH/mem_compiled_points.dat"
+      recursive_join "${CPU_PATH[@]}" > "$CPU_DATA"
+      recursive_join "${MEM_PATH[@]}" > "$MEM_DATA"
+
+      TITLE="Average CPU usage on $ORDERING data in a $CONTAINER"
+      XLABEL="Number of Elements"
+      YLABEL="CPU utilization percentage"
+      SAVE_PATH="cpu_utilization_$ORDERING""_""$CONTAINER.eps"
+      plot_wrapper "$CPU_DATA" "$TITLE" "$XLABEL" "$YLABEL" "$SAVE_PATH"
+
+      TITLE="Peak memory usage on $ORDERING data in a $CONTAINER"
+      XLABEL="Number of Elements"
+      YLABEL="Peak memory usage in KB"
+      SAVE_PATH="peak_memory_$ORDERING""_""$CONTAINER.eps"
+      plot_wrapper "$MEM_DATA" "$TITLE" "$XLABEL" "$YLABEL" "$SAVE_PATH"
     fi
     if [ "$TEST_TIME" == true ] ; then
-        recursive_join "${TIME_PATH[@]}" > "tmp_data/timedata/$COMPILED_TESTS_PATH/compiled_points.dat"
+      DATA_PATH="tmp_data/timedata/$COMPILED_TESTS_PATH/compiled_points.dat"
+      recursive_join "${TIME_PATH[@]}" > "$DATA_PATH"
+      TITLE="Sort time on $ORDERING data in a $CONTAINER"
+      XLABEL="Number of Elements"
+      YLABEL="Nanoseconds"
+      SAVE_PATH="time_$ORDERING""_""$CONTAINER.eps"
+      plot_wrapper "$DATA_PATH" "$TITLE" "$XLABEL" "$YLABEL" "$SAVE_PATH"
     fi
     if [ "$TEST_CALLGRIND" == true ] ; then
-        recursive_join "${CACHE_PATH[@]}" > "tmp_data/cpudata/$COMPILED_TESTS_PATH/compiled_points.dat"
+      DATA_PATH="tmp_data/cpudata/$COMPILED_TESTS_PATH/compiled_points.dat"
+      recursive_join "${CACHE_PATH[@]}" > "$DATA_PATH"
+      TITLE="Sort time on $ORDERING data in a $CONTAINER"
+      XLABEL="Number of Elements"
+      YLABEL="Total Cache Miss Rate"
+      SAVE_PATH="time_$ORDERING""_""$CONTAINER.eps"
+      plot_wrapper "$DATA_PATH" "$TITLE" "$XLABEL" "$YLABEL" "$SAVE_PATH"
     fi
     #if [ $TEST_PERF == true ] ; then
       #TODO: NOT IMPLEMENTED
     #fi
   done
 done
+echo "done"
