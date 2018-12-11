@@ -80,23 +80,23 @@ for SORT in "${SORTS[@]}" ; do
       TESTING_PATH="$CONTAINER/$ORDERING/$SORT"
 
       if [ "$TEST_ITERATOR_METRICS" == true ] ; then
-        ITR_PATH="tmp_data/itrdata/$TESTING_PATH"
+        ITR_PATH="data/itrdata/$TESTING_PATH"
         mkdir -p "$ITR_PATH"
       fi
       if [ "$TEST_CPU_AND_MEMORY" == true ] ; then
-        CPU_AND_MEM_PATH="tmp_data/rundata/$TESTING_PATH"
+        CPU_AND_MEM_PATH="data/rundata/$TESTING_PATH"
         mkdir -p "$CPU_AND_MEM_PATH"
       fi
       if [ "$TEST_TIME" == true ] ; then
-        TIME_PATH="tmp_data/timedata/$TESTING_PATH"
+        TIME_PATH="data/timedata/$TESTING_PATH"
         mkdir -p "$TIME_PATH"
       fi
       if [ "$TEST_CALLGRIND" == true ] ; then
-        CACHE_PATH="tmp_data/cpudata/$TESTING_PATH"
+        CACHE_PATH="data/cpudata/$TESTING_PATH"
         mkdir -p "$CACHE_PATH"
       fi
       if [ "$TEST_PERF" == true ] ; then
-        PERF_PATH="tmp_data/cpudata/$TESTING_PATH"
+        PERF_PATH="data/cpudata/$TESTING_PATH"
         mkdir -p "$PERF_PATH"
       fi
     done
@@ -115,29 +115,32 @@ for SORT in "${SORTS[@]}" ; do
         echo -n "Trial: "
         TESTING_PATH="$CONTAINER/$ORDERING/$SORT"
         for REP in $(seq 1 "$NUM_TRIALS") ; do
-          echo -n "$REP."
-
-          if [ "$TEST_ITERATOR_METRICS" == true ] ; then
-            echo -n '.'
-            ITR_PATH="tmp_data/itrdata/$TESTING_PATH"
-            ./SCP --enable-interator-metrics=true --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING" >> "$ITR_PATH/$LENGTH.tsv"
-          fi
+          echo -n "$REP"
           if [ "$TEST_CPU_AND_MEMORY" == true ] ; then
             #TODO: this one can actually be more appropriately split up more.
             echo -n '.'
-            CPU_AND_MEM_PATH="tmp_data/rundata/$TESTING_PATH"
-            /usr/bin/time -f '%P\t%M' -o "$CPU_AND_MEM_PATH/$LENGTH.tsv" -a ./SCP --enable-interator-metrics=false --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING"
+            CPU_AND_MEM_PATH="data/rundata/$TESTING_PATH"
+            /usr/bin/time -f '%P\t%M' -o "$CPU_AND_MEM_PATH/$LENGTH.tsv" -a ./SCP --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING"
           fi
           if [ "$TEST_TIME" == true ] ; then
             echo -n '.'
-            TIME_PATH="tmp_data/timedata/$TESTING_PATH"
+            TIME_PATH="data/timedata/$TESTING_PATH"
+            mkdir -p "$TIME_PATH"
+            touch "$TIME_PATH/$LENGTH.tsv"
             ts=$(date +%s%N)
-            ./SCP --enable-interator-metrics=false --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING"
+            ./SCP --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING"
             echo $(($(date +%s%N) - ts)) >> "$TIME_PATH/$LENGTH.tsv"
           fi
           if [ "$TEST_PERF" == true ] ; then
             echo -n '.'
             #TODO: NOT IMPLEMENTED
+            PERF_PATH="data/ipc/$TESTING_PATH"
+            mkdir -p "$PERF_PATH"
+            touch "$PERF_PATH/$LENGTH.tsv"
+            perf stat -o /tmp/perf_tmp.txt -B ./SCP --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING"
+            cat /tmp/perf_tmp.txt | grep -o -e '[0-9]\+\.[0-9]\+[ ]\+insn per cycle' | grep -o -e "[0-9]\+\.[0-9]\+" >> "$PERF_PATH/$LENGTH.tsv"
+            #rm -f /tmp/perf_tmp.txt
+            #echo "" >> "$PERF_PATH/$LENGTH.tsv"
           fi
         done
         #NOTE: CALLGRIND is entirely a simulation, and so multiple runs return
@@ -145,14 +148,11 @@ for SORT in "${SORTS[@]}" ; do
         #compare against perf's results.
         if [ "$TEST_CALLGRIND" == true ] ; then
           echo -n '.'
-          CPU_PATH="tmp_data/cpudata/$TESTING_PATH"
-          valgrind --tool=cachegrind --cachegrind-out-file=/dev/null ./SCP --enable-interator-metrics=false --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING" 2>> "$CPU_PATH/$LENGTH.tsv"
+          CPU_PATH="data/cpudata/$TESTING_PATH"
+          valgrind --tool=cachegrind --cachegrind-out-file=/dev/null ./SCP --container="$CONTAINER" --length="$LENGTH" --sort-type="$SORT" --test="$ORDERING" 2>> "$CPU_PATH/$LENGTH.tsv"
         fi
         echo "done!"
       done
     done
   done
 done
-
-cp -R tmp_data data
-#rm -r tmp_data
