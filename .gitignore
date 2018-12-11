@@ -5,3 +5,4 @@ SCP
 bin/data
 bin/tmp_data
 *.eps
+*.dat
