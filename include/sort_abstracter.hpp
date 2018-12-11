@@ -22,7 +22,7 @@ with "Sort Performance Comparison".  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include <algorithm>
-#include "timsort.hpp"
+#include <timsort.hpp>
 #include "other_timsorts.hpp"
 
 #include "introsort.hpp"

@@ -33,7 +33,7 @@ TODO: Add rebust argument handling
 #include <vector>
 
 #include "data_preparation.hpp"
-#include "iterator_metrics.hpp"
+//#include "iterator_metrics.hpp"
 #include "parse_arguments.hpp"
 #include "sort_abstracter.hpp"
 
@@ -51,6 +51,7 @@ run_test_on_container(
   container<T>
 ){
 
+/*
   typedef iteration_counter<
     typename container<T>::iterator,
     typename container<T>::value_type,
@@ -59,22 +60,23 @@ run_test_on_container(
       typename container<T>::iterator,
       typename container<T>::difference_type> >
   iterator;
+  //*/
 
   container<T> data;
   populate_container(args, data);
 
-  if(args.enable_iterator_metrics){
+  /*if(args.enable_iterator_metrics){
     auto begin = iterator(data.begin());
     auto end   = iterator(data.end());
     auto sorter = get_sort_func_ptr(args, begin);
     sorter(begin, end);
     print_iterator_stats(args);
-  }else{
-    auto begin = data.begin();
-    auto end   = data.end();
-    auto sorter = get_sort_func_ptr(args, begin);
-    sorter(begin, end);
-  }
+  }else{//*/
+  auto begin = data.begin();
+  auto end   = data.end();
+  auto sorter = get_sort_func_ptr(args, begin);
+  sorter(begin, end);
+  //}
 }
 
 
@@ -82,7 +84,7 @@ void
 test_bootstrap(
   const struct config args
 ){
-  if(args.enable_iterator_metrics){
+  /*if(args.enable_iterator_metrics){
     switch(args.chosen_container){
       case deque_:
         run_test_on_container(args, std::deque<counter<long int> >());
@@ -93,19 +95,19 @@ test_bootstrap(
       default:
         exit(-2);
     };
-  }else{
-      switch(args.chosen_container){
-        case deque_:
-          run_test_on_container(args, std::deque<long int>());
-          break;
-        case vector_:
-          run_test_on_container(args, std::vector<long int>());
-          break;
-        default:
-          exit(-2);
-      };
+  }else{//*/
+  switch(args.chosen_container){
+    case deque_:
+      run_test_on_container(args, std::deque<long int>());
+      break;
+    case vector_:
+      run_test_on_container(args, std::vector<long int>());
+      break;
+    default:
+      exit(-2);
+  };
 
-  }
+  //}
 
 }
 

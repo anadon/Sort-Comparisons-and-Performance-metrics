@@ -67,7 +67,7 @@ struct config{
   sort_test_type chosen_test = undefined_test;
   container_type chosen_container = undefined_container;
   ssize_t test_length = 0;
-  bool enable_iterator_metrics = false;
+  //bool enable_iterator_metrics = false;
 };
 
 
@@ -91,7 +91,7 @@ static struct argp_option options[] = {
   {"length", 'l', "INT", 0, "Specify the size of the data to test with a sort.  This argument is required for 'sorted', 'reverse-sorted', 'random_order', and 'median_of_three_killer'.  It is optional for 'stdin'.  This may only be specified once, and must be a positive integer value.", 0},
   {"sort-type", 's', "STRING", 0, "Specify the sort to use on the input data.  Currently supported sorts are 'std_sort', 'std_stable_sort', 'introsort', 'sequential_timsort', 'gfx_timsort', 'tvs_timsort', and 'null'.  The 'null' option is intended to be an option to allow measurement of the overhead of setting up incurred by the program in order to allow more accurate evaluation and comparison of the other sort functions.", 0},
   {"container", 'c', "STRING", 0, "Specify the underlying container type from the Standard Template Library to use.  Be aware that not every sort can use every container type, so you must be aware of the different underlying differences.  For most cases, this should be set to 'vector'.", 0},
-  {"enable-interator-metrics", 'i', "STRING", OPTION_ARG_OPTIONAL, "Default: disabled.  Track various metrics related to iterator operations to better understand what kind of operations a sort is doing, and allow direct comparison of the performance of various operations between sorts.  This can be turned on with 'enable' or 'true', and explicitly disabled with 'disable' or 'false'.", 0},
+// {"enable-interator-metrics", 'i', "STRING", OPTION_ARG_OPTIONAL, "Default: disabled.  Track various metrics related to iterator operations to better understand what kind of operations a sort is doing, and allow direct comparison of the performance of various operations between sorts.  This can be turned on with 'enable' or 'true', and explicitly disabled with 'disable' or 'false'.", 0},
   { 0 , 0, 0, 0, 0, 0}
 };
 
@@ -213,7 +213,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
         }
       }
       break;
-    case 'i':
+/*    case 'i':
       {
         if(nullptr == arg){
           cout << "No argument given for 'iterator metrics' parameter" << endl;
@@ -230,7 +230,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
           exit(EINVAL);
         }
       }
-      break;
+      break;//*/
     default:
       return ARGP_ERR_UNKNOWN;
   }
